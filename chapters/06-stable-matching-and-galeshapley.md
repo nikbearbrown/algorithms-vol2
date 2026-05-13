@@ -1,175 +1,190 @@
-# Stable Matching and Gale-Shapley
+# Chapter 6 — Stable Matching and Gale-Shapley
 
-## TL;DR
+*The market that works is the one nobody has reason to leave.*
 
-Stable matching pairs members of two sets — applicants and programs, students and schools, riders and drivers — such that no two unmatched parties prefer each other to their assigned partners. Reach for this chapter when a problem has the shape "two-sided market with preferences and a need for stability." After consulting it, you can apply the Gale-Shapley deferred-acceptance algorithm correctly, identify which side benefits (proposer-optimal stability), extend the model to many-to-one matching, and recognize when ties or incomplete preferences require variants.
+---
 
-## Recognition pattern
+## The Problem With Decentralized Markets
 
-Three signals.
+In the 1940s, American medical schools were producing a problem nobody had planned for.
 
-*Two distinct populations with preferences over each other.* Applicants rank programs; programs rank applicants. Students rank schools; schools rank students. Riders have preferences over drivers; drivers have preferences over rides. Each side has a preference list; the goal is to pair them.
+Hospitals needed residents. Medical students needed placements. Both sides had preferences. And because there was no central coordinator, hospitals started doing what you'd expect: they made offers early to lock in good candidates before competing hospitals could. By the late 1940s, offers were going out to students in their second year of medical school — years before graduation — with acceptance windows measured in hours. Students were committing to programs they'd barely evaluated, before they knew what their options were. Programs were committing to students who hadn't finished their training.
 
-*The pairing must be stable.* A matching is *stable* if no unmatched applicant-program pair would both prefer each other to their assigned partners. Instability creates pressure to renegotiate — the matched parties have incentive to break the match. Stability is what makes the assignment durable.
+The market was *unraveling*. Early commitment was individually rational for each hospital, but collectively ruinous for everyone. A student who waited to see her full range of options risked losing offers that evaporated while she thought. A hospital that waited to evaluate its candidates risked losing them to competitors who moved faster. The equilibrium was a race to the bottom.
 
-*Preferences are private and decentralized.* Without a centralized clearinghouse, stable matchings can be hard to reach — applicants apply, are accepted or rejected, may have their offers rescinded, may receive late offers from preferred programs after committing elsewhere. The "unraveling" of decentralized markets motivated the development of centralized matching algorithms.
+This is the problem stable matching solves — and understanding why it solves it is the whole chapter.
 
-A signal stable matching is *not* the right tool: pricing replaces preferences. In a market where prices clear demand, the matching mechanism is the price system, not preference-based matching. Auction-based assignment (Chapter 4) is the framework. Stable matching applies when participants cannot freely set prices — labor markets with fixed pay scales, school choice with no tuition variation, organ allocation with no monetary exchange.
+<!-- → CHART: Timeline showing the unraveling of the medical residency market 1930–1952 — a horizontal axis of years, with a line showing how far in advance of graduation offers were being made, creeping earlier and earlier, then a sharp reset to the 1952 NRMP founding. Student should see that unraveling is a measurable, progressive phenomenon, not a sudden crisis. -->
 
-The misconception engaged in §8 is consequential: "Stable matching produces a fair outcome." The Gale-Shapley algorithm produces a *stable* matching, not a fair one. The proposer side gets its best stable outcome; the receiver side gets its worst. Which side proposes determines who benefits. Calling the result "fair" misreads what the algorithm guarantees.
+---
 
-## What you need to know first
+## What Stability Means
 
-This chapter assumes basic combinatorial reasoning (Vol. 1 Chapter 2) and game theory at the level of Chapter 4. The strategy-proofness analysis uses Bayesian-game reasoning from Chapter 4. For the matching-as-graph framing, see Vol. 1 Chapter 5. For network flow as a matching mechanism (bipartite matching reduces to max-flow), see Vol. 1 Chapter 9.
+The setup: two groups of people, each with preferences over the other. Call them applicants and programs. Each applicant ranks the programs; each program ranks the applicants. You want to pair them up.
 
-## The stable matching problem
+A matching is just an assignment — this applicant goes to that program, that applicant goes to this program. There are many possible matchings. Most of them are bad.
 
-The classical problem (Gale and Shapley 1962) [verify]: two equal-sized sets `M` and `W` (originally framed as men and women, though the modern framing uses applicants and programs or two abstract sides). Each member of `M` has a strict ranking over members of `W`; each member of `W` has a strict ranking over members of `M`. A *matching* is a one-to-one correspondence between `M` and `W`. A matching is *stable* if no pair `(m, w)` exists where:
+Here's what makes a matching bad: suppose applicant Alice is matched to program X, but she would prefer program Y — and program Y would prefer Alice to whichever applicant it actually got. Then Alice and program Y have a mutual grievance. They'd both rather be matched to each other. In a decentralized world, they'd find each other and renegotiate. The assignment falls apart.
 
-- `m` and `w` are not matched to each other, *and*
-- `m` prefers `w` to `m`'s current match, *and*
-- `w` prefers `m` to `w`'s current match.
+A *blocking pair* is any applicant-program pair where both would prefer each other to their current assignments. A matching is *stable* if it has no blocking pairs.
 
-Such a pair is called a *blocking pair*. A stable matching has no blocking pairs.
+<!-- → INFOGRAPHIC: Small worked example with 3 applicants (Alice, Bob, Carol) and 3 programs (X, Y, Z), showing two matchings side by side — one with a blocking pair highlighted in red (Alice→X but Alice prefers Y and Y prefers Alice), one stable matching with no such pair. Caption: a blocking pair is a mutual grievance that unravels an assignment. -->
 
-**Existence.** A stable matching always exists for any preferences. This is non-obvious — preferences could be cyclic in a way that seems to preclude stability — but Gale and Shapley proved it by giving a constructive algorithm.
+Stability is what prevents unraveling. If no applicant-program pair has mutual incentive to defect from the assignment, the assignment holds. Nobody can do better by going around the mechanism. The medical-residency chaos was an instability problem: applicants and programs were finding each other and making private deals because the informal market wasn't producing stable outcomes.
 
-**Uniqueness.** Stable matchings are not unique. A given preference profile typically admits many stable matchings, varying in who gets matched to whom. The set of stable matchings has a lattice structure — the proposer-optimal and receiver-optimal matchings sit at the top and bottom respectively.
+Now the question is: can you always find a stable matching? And if so, how?
 
-## The Gale-Shapley deferred-acceptance algorithm
+---
 
-The algorithm runs in rounds.
+## The Algorithm
 
-```
-Initialize: all members of M and W are unmatched.
+David Gale and Lloyd Shapley answered both questions in 1962. Yes, a stable matching always exists. And here is how to find one.
 
-While some m in M is unmatched and has not proposed to all w in W:
-    m proposes to the highest-ranked w on m's list to whom m has not yet proposed.
-    If w is unmatched: w tentatively accepts m.
-    Else: w compares m to her current tentative match m'.
-          If w prefers m to m': w rejects m', tentatively accepts m. m' becomes unmatched.
-          Else: w rejects m. m proceeds to the next w on m's list.
+The algorithm runs in rounds. Every unmatched applicant proposes to the highest-ranked program on their list they haven't already proposed to. Each program looks at its proposals — including any applicant it's currently holding from a previous round — and tentatively accepts its most-preferred applicant. It rejects the rest.
 
-When no m has an unmatched-and-unproposed candidate: tentative matches become final.
-```
+Rejected applicants move down their lists and propose to their next choice in the following round. Programs keep their tentative match but may upgrade if a better applicant proposes. This continues until no applicant has a program left to propose to.
 
-Time complexity: `O(n²)` where `n = |M| = |W|`. Each member of `M` proposes to each member of `W` at most once, giving `n²` proposals.
+The word "deferred" in the algorithm's name — deferred acceptance — refers to what the programs do. They don't commit immediately. They hold a tentative match but stay open to upgrading. An applicant held by a program may be dropped if a better applicant arrives later.
 
-**Correctness.** The output is a stable matching:
-- *Termination*: every proposal moves a member of `M` down their preference list; total proposals bounded by `n²`.
-- *No blocking pairs*: if `(m, w)` were a blocking pair where `m` prefers `w` to current match, `m` would have proposed to `w` before reaching the current match. `w` either accepted (and would be matched to `m` or someone she prefers more, contradicting blocking) or rejected (meaning she preferred her current tentative match, so wouldn't prefer `m` now).
+<!-- → INFOGRAPHIC: Step-by-step trace of Gale-Shapley on a 3×3 example across 3 rounds — show each applicant's proposal arrow, each program's held/rejected decision, and the state of tentative matches after each round. Student should see how a tentative match gets displaced when a better proposal arrives, making "deferred" concrete. -->
 
-**Proposer-optimal stability.** The Gale-Shapley algorithm with `M` proposing produces the matching where every `m` gets the *best* partner achievable in any stable matching (Gale-Shapley 1962) [verify]. Symmetrically, every `w` gets the *worst* partner achievable in any stable matching. The roles are perfectly inverted: which side proposes determines who is favored.
+Why does this produce a stable matching? Suppose, at the end of the algorithm, that Alice is matched to program X but prefers program Y. For (Alice, Y) to be a blocking pair, program Y would also need to prefer Alice to its current match. But if Alice prefers Y to X, Alice would have proposed to Y before proposing to X — proposals go in preference order. If program Y rejected Alice, it's because Y had a candidate it preferred at the time and never downgraded to Alice. Y prefers its current match to Alice. So (Alice, Y) is *not* a blocking pair. This logic covers every possible applicant-program pair, so the matching is stable.
 
-This is the chapter's most consequential structural fact. The "fairness" misconception arises from missing it.
+The runtime is $O(n^2)$ where $n$ is the number of applicants (equal to the number of programs in the classical one-to-one setting). Each applicant proposes to each program at most once — $n$ applicants, $n$ proposals each, $n^2$ proposals total. Each proposal is processed in constant time.
 
-## Strategy-proofness
+A stable matching always exists because the algorithm always terminates with one.
 
-A matching mechanism is *strategy-proof* if each participant's best strategy is to report their true preferences, regardless of what others do.
+---
 
-**One-sided strategy-proofness of Gale-Shapley.** When `M` proposes, the proposing side has a dominant strategy of reporting truthfully (Roth 1982) [verify]. Lying about preferences cannot improve a proposer's match.
+## Who Benefits
 
-**One-sided manipulability.** The receiving side can sometimes benefit from misreporting. By truncating their preference list (claiming some acceptable matches are unacceptable), a receiver may end up matched to a more-preferred partner. This is the "rural hospital theorem" inverse — the receivers can manipulate, the proposers cannot.
+Here is the fact about Gale-Shapley that most people miss, and it's the most important structural result in the chapter.
 
-**No two-sided strategy-proof stable mechanism.** Roth (1982) [verify] showed that no stable matching mechanism is strategy-proof for both sides. The trade-off is structural; you can't have both stability and bilateral truthfulness.
+When applicants propose, every applicant gets the *best* partner they could get in *any* stable matching. Not just a stable matching — the best one, across all possible stable matchings. This is the proposer-optimal property.
 
-The asymmetry matters in practice. A matching mechanism's choice of proposer determines who can manipulate and who cannot. Mechanism designers in real markets (the NRMP, school choice systems) chose proposing sides deliberately.
+The flip side: every program gets the *worst* partner they could get in any stable matching.
 
-## Variants — many-to-one, ties, incomplete preferences
+These two facts come together. The full set of stable matchings for a given preference profile forms a lattice — a partially ordered set with a top and a bottom. The applicant-proposing Gale-Shapley algorithm produces the top of the lattice for applicants, which is simultaneously the bottom for programs. If you flip who proposes — program-proposing Gale-Shapley — you get the other extreme: best for programs, worst for applicants.
 
-The classical problem assumes one-to-one matching with strict, complete preferences. Real markets violate each assumption.
+<!-- → DIAGRAM: A lattice diagram showing the set of stable matchings for a small example — nodes are matchings, edges connect matchings that differ by one swap, with the applicant-optimal matching at the top and the program-optimal at the bottom. Label the 1952 NRMP (program-proposing, bottom for applicants) and the 1998 redesign (applicant-proposing, top for applicants). Student should see that the redesign wasn't a bug fix — it was a deliberate move across the lattice. -->
 
-**Many-to-one matching.** Programs match with multiple applicants up to a quota. The NRMP, college admissions, school choice. Gale-Shapley generalizes: the proposing side (applicants) propose; programs hold the top `k` proposals (where `k` is the program's quota) and reject the rest. Stability is defined analogously, with blocking pairs being applicant-program pairs where both would prefer each other.
+Why does this happen? The deferred-acceptance structure benefits the proposing side because proposers keep proposing down their preference lists until someone accepts. A proposer is never held at a program worse than their best stable option — if they could have gotten a better program in some stable matching, they would have proposed there first and been held. The receiving side has the opposite experience: programs can only accept or reject the applicants who arrive. They have no ability to reach out to preferred applicants who haven't proposed.
 
-**Ties in preferences.** Programs may have ties (no strict ranking among some applicants). With ties, multiple stable matchings can have different *applicant-side* utilities, and the question of which to choose becomes a separate optimization. Tie-breaking randomly produces a stable matching but may sacrifice some applicants' welfare.
+The consequence for mechanism design is direct: which side you let propose determines who wins. This is a policy decision, not a technical detail.
 
-**Incomplete preferences.** Applicants may not rank all programs (some are unacceptable). Programs may have minimum thresholds. The Gale-Shapley algorithm extends; the result is stable on the *acceptable* set, with some participants potentially unmatched.
+The NRMP was originally program-proposing — which meant programs got their best stable outcomes and applicants got their worst. In 1998, following research by Alvin Roth and Elliott Peranson, the mechanism was redesigned to be applicant-proposing. The change was deliberate. It moved the outcome across the lattice from the program-optimal stable matching to the applicant-optimal stable matching.
 
-**The rural hospital theorem.** In many-to-one matching with incomplete preferences, the *set* of unmatched participants and *fill rate* of programs is the same across all stable matchings (Roth 1986) [verify]. Some hospitals — typically rural, less-preferred — fill below their quotas in every stable matching. The theorem has policy implications: reshuffling stable matchings doesn't help unfilled hospitals.
+---
 
-**Couples and complementarities.** When applicants are couples seeking nearby placements, preferences become non-substitutable, and stable matchings may not exist. Real systems (NRMP) have specialized algorithms for couples.
+## Strategy-Proofness
 
-## Decision rules
+Suppose you're an applicant in an applicant-proposing Gale-Shapley mechanism. Should you submit your true preferences, or should you game the system?
 
-| Situation | Approach |
-| --- | --- |
-| Two-sided market, preferences known, want stability | Gale-Shapley deferred acceptance |
-| Decide which side proposes | The proposing side gets best stable outcome; choose deliberately |
-| Many-to-one (residents/hospitals, students/schools) | Gale-Shapley with quotas |
-| Ties in preferences | Tie-break randomly or by secondary criterion |
-| Incomplete preferences (some unacceptable) | Gale-Shapley extends; some participants unmatched |
-| Need strategy-proofness on one side | Gale-Shapley with that side proposing |
-| Need strategy-proofness on both sides | Impossible — Roth 1982 |
-| Couples seeking nearby placements | NRMP-style specialized algorithm |
-| School choice with priorities | Boston mechanism (manipulable) or DA (strategy-proof for students) |
-| Allocation without preferences (random) | Random serial dictatorship |
-| Allocation with prices | Auction (Chapter 4), not stable matching |
-| Bipartite matching without preference structure | Max-flow on bipartite graph (Vol. 1 Chapter 9) |
+Roth showed in 1982 that for applicants in an applicant-proposing mechanism, truthful reporting is a dominant strategy. You cannot do better by lying about your preferences. If you truncate your list — pretending some programs are unacceptable when they're not — you might end up unmatched rather than matched to your least-preferred acceptable program. If you permute your list — claiming you prefer program Y to program X when you actually prefer X — you might end up at Y rather than X.
 
-## Worked example — the medical residency match (NRMP)
+The proposing side has nothing to gain from misreporting.
 
-The National Resident Matching Program matches roughly 50,000 graduating medical students to residency programs each year [verify]. Both sides submit ranked preference lists. The match is centralized; participants cannot directly communicate offers.
+The receiving side is different. Programs in an applicant-proposing mechanism can sometimes benefit from misreporting — specifically, by truncating their preference lists (claiming an applicant is unacceptable who is actually acceptable). By doing this, a program may end up matched to a more-preferred applicant through a rebalancing of the matching across the preference structure. This is theoretically possible; it requires the program to have precise information about other programs' preferences, which in practice they rarely do.
 
-**History.** Before 1952, the medical-residency market was decentralized. Applicants received offers progressively earlier as programs tried to lock in top candidates before competitors could counter. By the 1940s, programs were making offers to medical students in their second year — years before graduation, with binding acceptance windows of hours. The market was *unraveling*.
+The deeper result is a theorem by Roth: no stable matching mechanism can be strategy-proof for both sides simultaneously. The asymmetry is structural. You can protect one side from manipulation, but not both. Real mechanism designers choose which side to protect — and that choice reflects whose welfare they're prioritizing.
 
-The NRMP was created in 1952 [verify] to solve unraveling via a centralized algorithm. The original mechanism was the *program-proposing* version of Gale-Shapley.
+---
 
-**The 1998 redesign.** The mechanism was *program-proposing* until 1998. This produced *program-optimal* stable matchings — programs got the best stable outcome; applicants got the worst. After concerns about applicant welfare (and recognition that the proposer-side bias produced systematically worse outcomes for the side that did not propose), the NRMP redesigned the algorithm to be *applicant-proposing* (Roth and Peranson 1999) [verify].
+## The Real World Is More Complicated
 
-The redesign matters because of the proposer-optimal property. Applicants in the new mechanism receive their best stable matches; programs receive their worst stable matches. For applicants who would have been matched anyway, the two mechanisms might produce the same outcome — but for applicants whose stable-matching options vary across the lattice of stable matchings, the change is meaningful.
+The classical Gale-Shapley setup has equal-sized groups, strict preferences, and complete rankings. Real markets violate all three.
 
-**Couples.** The NRMP has substantial numbers of couples (married medical students) seeking placements that allow them to live near each other. Couples' preferences are over *pairs* of placements, which can break the substitutability assumption that guarantees stable-matching existence in the standard model. The NRMP's algorithm includes a specialized couples-handling extension; in some years, no stable matching exists with couples, and the algorithm reports the closest approximation.
+**Many-to-one matching.** A residency program doesn't take one applicant — it takes a cohort. A school district doesn't assign one student per school. The extension to many-to-one is straightforward: programs have a *quota* (maximum number of applicants they'll accept). The algorithm runs the same way, except programs hold their top $k$ proposals rather than their top one. Stability is defined analogously, and the proposer-optimal property still holds.
 
-**Empirical patterns.**
+**Ties.** Programs often can't strictly rank all applicants — some are equally qualified. When preferences have ties, multiple stable matchings can have different welfare properties for the same side. A random tie-breaking rule produces a stable matching but may not be fair in the sense of equal treatment.
 
-- Most participants get one of their top choices. The match is *high-quality* for applicants in the typical case, even though the algorithm guarantees only stability, not satisfaction.
-- The rural hospital theorem holds: certain hospitals (geographically remote, less prestigious) fill below quota in every stable matching. The NRMP's switch to applicant-proposing did not help these hospitals.
-- Strategy-proofness for applicants matters: medical students can submit truthful preferences without strategic concern. Programs can in principle manipulate but rarely have the information to do so effectively.
+**Incomplete preferences.** Applicants may not want to rank every program (some are genuinely unacceptable). Programs may not want to accept every applicant. The algorithm handles this: unacceptable options are simply omitted from the preference list. Some participants may end up unmatched.
 
-**The school-choice analog.** Many U.S. cities (Boston, NYC, Denver, New Orleans) use modified Gale-Shapley for public-school assignment [verify]. The Boston Public Schools used a non-strategy-proof mechanism (the "Boston mechanism") until 2005, then switched to applicant-proposing Gale-Shapley after research showed applicant manipulation was producing welfare-reducing distortions (Abdulkadiroğlu and Sönmez 2003) [verify]. The redesign followed the same pattern as the NRMP: from a manipulable mechanism to a strategy-proof one for the side that the policymaker prioritized.
+The rural hospital theorem, proved by Roth in 1986, gives a sharp result about incomplete-preferences matching: the *set* of unmatched participants is identical across all stable matchings. If a program fills below quota in one stable matching, it fills below quota in every stable matching, by the same amount. Reshuffling stable matchings — moving from program-optimal to applicant-optimal — doesn't help hospitals that no applicant ranked. The unfilled slots are a structural feature of the preferences, not an artifact of which stable matching you chose.
 
-The lesson: stable matching is a structural framework, not a fairness guarantee. The choice of proposer, the handling of couples and ties, the inclusion or exclusion of priority systems — all are mechanism-design decisions that determine who benefits. Real production matching systems are decades of accumulated mechanism-design research applied to specific markets.
+<!-- → TABLE: Two-column illustration of the rural hospital theorem — left column shows applicant-optimal stable matching with fill rates per program; right column shows program-optimal stable matching with fill rates. The rural/less-preferred programs show identical fill rates in both columns. Caption: switching which side proposes changes who wins among matched participants but leaves unfilled programs unfilled regardless. -->
 
-## Failure modes — when "stable matching produces a fair outcome" misleads
+This matters for policy. Rural hospitals are unfilled because applicants don't prefer them, not because the algorithm is badly designed. No change to the matching mechanism changes that. The intervention, if one is warranted, is outside the algorithm — incentive programs, living allowances, pipeline development.
 
-The misconception engaged: "Stable matching produces a fair outcome."
+**Couples.** The NRMP has a genuine complication: married medical students who want placements in the same geographic area. A couple's preference isn't over individual programs — it's over *pairs* of programs. This breaks the substitutability assumption that makes Gale-Shapley work. When preferences involve complementarities (I want program A only if my partner also gets program B), a stable matching may not exist. The NRMP runs a specialized extension; in some years the algorithm reports an approximation because no true stable matching is achievable with the submitted preferences.
 
-The Gale-Shapley algorithm produces a *stable* matching. Stability is a specific property: no pair has incentive to break their assignment. Fairness is a different concept and the algorithm does not guarantee it.
+---
 
-**The proposer side is favored.** The proposer-proposing version produces the proposer-optimal stable matching. Every proposer gets the best stable partner; every receiver gets the worst stable partner. Calling this fair to both sides is wrong.
+## The Fairness Misconception
 
-**Choice of proposer is a policy decision.** Whether `M` or `W` proposes is determined by the mechanism designer. The choice has welfare consequences. Markets with applicant-proposing mechanisms favor applicants; markets with program-proposing mechanisms favor programs. The 1998 NRMP redesign was an explicit choice to favor applicants over programs.
+The most consequential mistake practitioners make when working with stable matching is calling the result *fair*.
 
-**Ties create welfare ambiguity.** When preferences have ties, multiple stable matchings produce different applicant-side outcomes. Tie-breaking matters. Random tie-breaking produces fairness in expectation; deterministic tie-breaking may favor systematically.
+Stability is not fairness. Stability means no blocking pair — no applicant-program pair has mutual incentive to defect. It says nothing about whether the assignment is equitable across applicants, or whether the proposing side benefited at the receiver side's expense, or whether applicants from disadvantaged backgrounds entered the market with equal prospects.
 
-**Incomplete preferences hide unmatched parties.** Some participants are unmatched in every stable matching (rural hospital theorem). Their welfare is zero. Calling the matching fair while ignoring them misrepresents the situation.
+The proposer-optimal property is not fair to the receiving side. Every program in an applicant-proposing mechanism gets its worst stable outcome. The mechanism was designed to favor applicants. Calling the result "fair to everyone" is wrong — and it obscures the policy decision that was made about whose welfare to prioritize.
 
-**Strategy-proofness is one-sided.** The receiving side can manipulate. In real markets, sophisticated participants on the receiving side may game the system; less-sophisticated participants pay the cost. The asymmetry between proposer-strategy-proofness and receiver-manipulability creates fairness questions about who has the information and capacity to manipulate.
+There are multiple stable matchings in the lattice. The Gale-Shapley algorithm picks one extreme. Interior stable matchings — ones that sit between the proposer-optimal and receiver-optimal ends — may better balance welfare across both sides. Choosing which stable matching to implement is itself a policy question, and answering it requires being explicit about fairness criteria that stability alone cannot resolve.
 
-**Stability doesn't address allocation across markets.** A match within one market is stable; whether the market itself is fair (do applicants from disadvantaged backgrounds enter with the same prospects?) is outside the algorithm's scope. Stability is a local property.
+Ties create another welfare ambiguity. When programs have tied preferences, different tie-breaking rules lead to different stable matchings with different applicant welfare. Random tie-breaking is fair in expectation — any applicant is equally likely to benefit from the tie resolution. Deterministic tie-breaking by secondary criterion (say, test score) may systematically advantage some applicants over others while remaining stable throughout.
 
-**Welfare comparisons across stable matchings.** The set of stable matchings has a lattice structure. The proposer-optimal and receiver-optimal are extremes; intermediate stable matchings exist that may better balance welfare. The Gale-Shapley algorithm picks the extreme of the lattice; other algorithms (linear programming, mediating mechanisms) pick interior points. Choosing among stable matchings is itself a policy question.
+Finally, stability says nothing about the market itself. A stable matching within a medical residency system is consistent with a market where graduates from certain medical schools never reach top programs, where informal networks shape which applicants programs actually rank, where rural communities lack the physicians they need. The algorithm is stable with respect to the preferences submitted; it doesn't adjudicate whether those preferences were shaped by fair conditions. Stability is a local property.
 
-**Couples and complementarities can preclude stability.** When the standard model breaks (couples, peer effects, complementarities), no stable matching may exist. Real markets handle these cases with approximations, not stable matchings.
+The corrective: name which side proposes, state what the welfare implications are, handle ties and incomplete preferences explicitly, and keep fairness criteria on the table as a separate question from stability.
 
-The corrective heuristic: state which side proposes, what the welfare implications are, how ties and incomplete preferences are handled, and what fairness criteria are required separately from stability. Stability is one criterion; fairness is many.
+---
 
-## Cross-references
+## What Comes Next
 
-For game-theoretic mechanism design underlying strategy-proofness, see Chapter 4. For Bayesian-game reasoning when participants have private types, see Chapter 4 §6. For bipartite matching without preferences (combinatorial maximum matching) reducing to network flow, see Vol. 1 Chapter 9. For the NP-hardness of certain matching variants (matching with couples), see Vol. 1 Chapter 10.
+Stable matching gives you a framework for two-sided markets where preferences are fixed and the goal is a durable assignment. The key insight — that stability prevents unraveling by removing the incentive to defect — generalizes beyond the specific algorithm.
 
-## Companion-page handoffs
+Chapter 7 moves from *matching* to *routing*: how do you direct flows through a network when the network is uncertain and participants are self-interested? The question of stability returns, but now in a dynamic setting where the "match" is renegotiated every time a packet or a vehicle makes a routing decision. The mechanism-design intuitions from this chapter carry forward; the combinatorial structure is different.
 
-Many-to-one matching implementations with quotas and ties; school-choice algorithm comparisons (Boston mechanism vs deferred acceptance vs top trading cycles); real NRMP statistics (match rates by specialty, couples handling, fill rates); Gale-Shapley implementation in Python with traceability of preference reasoning; rural hospital theorem demonstration. Available at bearbrown.co/algorithms-by-bear-vol2/chapter-6.
+The deeper thread: markets are algorithms, whether or not anyone designed them to be. The medical-residency market in the 1940s was running an algorithm — it was just a bad one. Unraveling is what an unstable market does. The NRMP replaced it with a better algorithm, one whose fixed point is durable by construction. Understanding why the better algorithm works is understanding what stability actually buys.
 
-## What this chapter does not enable
+---
 
-This chapter does not give a deep treatment of mechanism design impossibility theorems beyond the Roth strategy-proofness result. The Gibbard-Satterthwaite theorem [verify], the Myerson-Satterthwaite theorem on bilateral trade impossibility, and the broader landscape of impossibility results in social choice theory are out of scope; consult Roth's *The Economics of Matching* and Mas-Colell-Whinston-Green for graduate treatments. The chapter also does not cover online matching (where preferences arrive sequentially), kidney-exchange algorithms (which are a different combinatorial structure), or two-sided platforms with prices (which combine matching with auction-style mechanisms).
+## What You Can Do Now
 
-## Capability statement
+You can recognize when a problem is a stable-matching problem: two-sided preferences, a need for durable assignment, and pressure toward unraveling in a decentralized setting. You can apply Gale-Shapley correctly, with attention to which side proposes and what that means for outcomes. You can extend the framework to many-to-one matching with quotas, handle ties and incomplete preferences, and identify the cases — couples, complementarities — where stable matchings may not exist. You can state the rural hospital theorem and explain why mechanism-redesign doesn't help unfilled programs. And you can articulate precisely why stability is not fairness, and what the proposer-optimal property means for which side wins.
 
-You can now recognize when a problem is a stable-matching problem; apply Gale-Shapley correctly with attention to which side proposes and what that means for outcomes; extend to many-to-one matching with quotas, ties, and incomplete preferences; recognize the strategy-proofness asymmetry and its implications; and avoid the failure mode of conflating stability with fairness. The next time a two-sided market with preferences requires assignment — applications, school choice, organ allocation, residency matching — the path from problem to mechanism is in your hands.
+The next time a two-sided assignment problem arrives — applications, school choice, residency, internal project staffing — the question to ask first is: who proposes? Everything follows from the answer.
 
+---
+
+## Exercises
+
+### Warm-Up
+
+**W1.** Three applicants (Alice, Bob, Carol) and three programs (X, Y, Z) have the following strict preferences:
+
+| Applicant | Preference | Program | Preference |
+|-----------|-----------|---------|-----------|
+| Alice | Y > X > Z | X | Alice > Carol > Bob |
+| Bob | X > Y > Z | Y | Bob > Alice > Carol |
+| Carol | X > Y > Z | Z | Alice > Bob > Carol |
+
+Run the applicant-proposing Gale-Shapley algorithm by hand. Trace each round: who proposes, who accepts, who is rejected. State the final matching and verify it has no blocking pairs. *(Tests: algorithm mechanics, stability verification.)*
+
+**W2.** Using the same preference profile from W1, now run the program-proposing version of Gale-Shapley. State the final matching. Compare the two outcomes: which applicants are better off under applicant-proposing? Which programs are better off under program-proposing? Does either result surprise you, given the proposer-optimal property? *(Tests: proposer-optimal property, welfare comparison across the two algorithm variants.)*
+
+**W3.** A matching mechanism is called strategy-proof for one side if truthful preference reporting is a dominant strategy for that side. In the applicant-proposing Gale-Shapley mechanism: (a) Is it ever in Alice's interest to submit a preference list that swaps her top two programs? Explain why or why not. (b) Is it ever in program X's interest to truncate its preference list? Describe the general condition under which this might help it. *(Tests: strategy-proofness for proposing side, manipulability of receiving side.)*
+
+### Application
+
+**A1.** A technology company runs annual project assignments: 12 engineers and 12 projects, each with preferences over the other. Currently, project leads make offers to engineers in an informal process: leads identify their top candidates and extend verbal offers, engineers have 24 hours to accept or decline, and leads move to their next choice if rejected. Identify which structural property of stable matching this mechanism violates. Name two specific behaviors you would expect to observe as a symptom of this violation. Describe what a Gale-Shapley redesign would change and who would benefit. *(Tests: unraveling recognition, blocking pairs in decentralized markets, mechanism redesign consequences.)*
+
+**A2.** A city school district runs a student-school assignment process. Each student ranks up to 5 schools; each school has a quota and ranks applicants by a priority score (sibling enrollment, then test score, then lottery). Ties in priority score are broken randomly. Explain why this is a many-to-one matching problem. Identify the role of incomplete preferences (students rank only 5 of 20 schools) and tie-breaking. What does the rural hospital theorem predict about the lowest-demand schools in this system, and what policy intervention does that suggest? *(Tests: many-to-one extension, incomplete preferences, rural hospital theorem, policy implications.)*
+
+**A3.** Two medical students are a married couple applying to residency programs in the same metropolitan area. Their joint preference is: (Neurology-City A, Cardiology-City A) > (Internal Medicine-City A, Pediatrics-City A) > (Neurology-City B, Cardiology-City B). Explain why this preference structure is not representable as two independent individual preference lists. What property of the standard Gale-Shapley model does it violate? What does this imply about the existence of a stable matching when couples are present? *(Tests: couples and complementarities, substitutability assumption, limits of the standard model.)*
+
+### Synthesis
+
+**S1.** A colleague argues: "We redesigned our hiring process to use applicant-proposing Gale-Shapley. Now it's fair to everyone." Write a precise technical response that (a) states what the proposer-optimal property actually guarantees, (b) explains in what sense the new mechanism is *not* fair to hiring managers (programs), (c) describes the lattice of stable matchings and where the new mechanism sits in it, and (d) identifies at least one fairness criterion the new mechanism leaves unaddressed. *(Tests: proposer-optimal property, fairness vs. stability distinction, lattice structure, limits of the stability guarantee.)*
+
+**S2.** A nonprofit designs a mentorship matching program: 40 junior researchers (applicants) and 15 senior researchers (mentors, each willing to take up to 3 mentees). The nonprofit wants the mechanism to be strategy-proof for junior researchers and to produce stable outcomes. They are considering three designs: (i) juniors propose, (ii) seniors propose, (iii) a lottery with no preference elicitation. For each design, state whether it achieves the two stated goals, identify who is favored and who can manipulate, and recommend one design with justification. *(Tests: many-to-one extension, strategy-proofness choice, who-proposes-who-wins, mechanism selection.)*
+
+**S3.** The Boston Public Schools used the "Boston mechanism" for school assignment until 2005: students list their top choices in order; the algorithm first fills seats at each school with students who listed it first (by priority score), then repeats for second choices, and so on. A student who lists a competitive school second risks not getting their first choice and also being shut out of the competitive school (whose seats are already filled). Explain the strategic problem this creates for students. State how applicant-proposing Gale-Shapley resolves it, and why that resolution is connected to strategy-proofness rather than just to stability. *(Tests: manipulability of non-strategy-proof mechanisms, strategy-proofness as a design goal distinct from stability, real-world mechanism comparison.)*
+
+### Challenge
+
+**C1.** The rural hospital theorem states that the set of unmatched participants is identical across all stable matchings. Suppose a policy-maker claims: "If we switch from program-proposing to applicant-proposing Gale-Shapley, rural hospitals that currently go unfilled will attract better applicants because applicants now have more bargaining power." Evaluate this claim. What does the theorem actually imply about the fill rate of rural hospitals across the two mechanisms? What *does* change for rural hospitals when the proposing side switches, if anything? What type of intervention *would* change rural hospital fill rates, and why is it outside the algorithm's scope? *(Tests: rural hospital theorem, what does and doesn't change across stable matchings, limits of mechanism design.)*
+
+**C2.** Design a matching mechanism for the following setting: a graduate school with 50 PhD applicants, 20 faculty advisors (each willing to take 1–3 students), and the following complications: (a) some applicants are co-advised and have joint preferences over advisor pairs, (b) two faculty members have a known conflict and refuse to co-advise the same student, (c) the school wants the mechanism to be strategy-proof for students. Identify which of these complications is handleable by standard Gale-Shapley variants, which requires a specialized extension, and which may preclude the existence of a stable matching. Sketch the design choices you would make and their welfare consequences. Identify the unresolved tension in your design. *(Tests: synthesis of variants — many-to-one, couples, complementarities, strategy-proofness — and honest acknowledgment of impossibility results.)*
 
 ---
 
@@ -269,7 +284,7 @@ mind*, *Outcome (to fill in later)*.
 
 ---
 
-## 🕰️ AI Wayback Machine
+## AI Wayback Machine
 
 The ideas in this chapter didn't appear from nowhere. **Marilda Sotomayor** is a Brazilian economist who co-wrote the canonical textbook on two-sided matching with Alvin Roth — extending Gale–Shapley to the messy real-world cases of many-to-one and many-to-many matching that show up in school choice, residency matching, and kidney exchange.
 
