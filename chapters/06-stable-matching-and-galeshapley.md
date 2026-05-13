@@ -266,3 +266,24 @@ mind*, *Outcome (to fill in later)*.
 **Connection to previous chapters:** Strategy-proofness analysis is game-theoretic (Chapter 4). Many-to-one matching with capacity constraints connects to scheduling (Chapter 5). The Bayesian-game framing of submitting preferences under uncertainty (Chapter 1) applies.
 
 **Preview of next chapter:** Chapter 7 (Randomness and Networking) shifts to *systems* decisions — when to randomize routing, when to use gossip protocols, when consistent hashing earns its keep. The diary entry will be the most engineering-flavored of the eight.
+
+---
+
+## 🕰️ AI Wayback Machine
+
+The ideas in this chapter didn't appear from nowhere. **Marilda Sotomayor** is a Brazilian economist who co-wrote the canonical textbook on two-sided matching with Alvin Roth — extending Gale–Shapley to the messy real-world cases of many-to-one and many-to-many matching that show up in school choice, residency matching, and kidney exchange.
+
+**Run this:**
+
+```
+Who is Marilda Sotomayor, and how does her work on two-sided matching markets connect to the Gale–Shapley algorithm we implemented in this chapter? Keep it to three paragraphs. End with the single most surprising thing about her career or ideas.
+```
+
+→ Search **"Marilda Sotomayor"** on Wikipedia. See what the model got right, got wrong, or left out.
+
+**Now make the prompt better.** Try one of these:
+
+- Ask it to extend Gale–Shapley to a many-to-one case (residents to hospitals), and explain where new failure modes appear.
+- Ask it to compare Sotomayor's school-choice mechanisms with the deferred-acceptance algorithm you implemented — what's different in practice?
+
+What changes? What gets better? What gets worse?

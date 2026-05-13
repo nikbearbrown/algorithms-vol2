@@ -287,3 +287,24 @@ cryptographic*, *Debugging plan*, *What I'll do next*,
 **Connection to previous chapters:** The bandit framing (Chapter 3) is a randomized-exploration decision. Game-theoretic adversarial inputs (Chapter 4) connect directly to "the deterministic alternative is fragile under adversarial input."
 
 **Preview of next chapter:** Chapter 8 (Social Networks) is the diary's closing entry — and the synthesis moment. You'll work through one position-or-influence problem on a real network, *then* do a pass across all eight entries to surface the patterns the diary has revealed about your decision-making.
+
+---
+
+## 🕰️ AI Wayback Machine
+
+The ideas in this chapter didn't appear from nowhere. **Radia Perlman** invented the spanning tree protocol in 1985 — the algorithm that keeps every Ethernet network on the planet from collapsing under broadcast storms. She's sometimes called "the mother of the internet," but she objects to the title.
+
+**Run this:**
+
+```
+Who is Radia Perlman, and how does her work on the spanning tree protocol and link-state routing connect to the randomness and networking algorithms we covered in this chapter? Keep it to three paragraphs. End with the single most surprising thing about her career or ideas.
+```
+
+→ Search **"Radia Perlman"** on Wikipedia. See what the model got right, got wrong, or left out.
+
+**Now make the prompt better.** Try one of these:
+
+- Ask it to explain how the spanning tree protocol avoids broadcast loops, using a 4-switch example.
+- Ask it to compare Perlman's deterministic spanning tree with the randomized algorithms in this chapter — what does randomness buy, what does determinism buy?
+
+What changes? What gets better? What gets worse?

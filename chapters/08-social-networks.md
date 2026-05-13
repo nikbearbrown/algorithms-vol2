@@ -271,3 +271,24 @@ findings above and a one-sentence honest summary at the end.
 **Connection to previous chapters:** All of them. The synthesis is the chapter — it reads back across the seven prior entries.
 
 **Preview of next chapter:** None — this is the volume's final chapter and the diary's closing entry. Set six-month and one-year calendar reminders to revisit each entry and fill in the "Outcome" section. The diary becomes most valuable in retrospect, when the predictions you made meet the realities they were predictions about.
+
+---
+
+## 🕰️ AI Wayback Machine
+
+The ideas in this chapter didn't appear from nowhere. **Mark Granovetter** published "The Strength of Weak Ties" in 1973 — arguing that the loose acquaintances you barely know matter more for job-finding and information flow than your closest friends. It became one of the most-cited papers in the history of sociology.
+
+**Run this:**
+
+```
+Who is Mark Granovetter, and how does his 1973 paper on the strength of weak ties connect to the social network analysis we covered in this chapter? Keep it to three paragraphs. End with the single most surprising thing about his career or ideas.
+```
+
+→ Search **"Mark Granovetter"** on Wikipedia. See what the model got right, got wrong, or left out.
+
+**Now make the prompt better.** Try one of these:
+
+- Ask it to explain Granovetter's "forbidden triad" in plain language and connect it to the clustering coefficient measurements you ran.
+- Add a constraint: "Answer as the abstract of a follow-up paper to 'The Strength of Weak Ties,' written fifty years later."
+
+What changes? What gets better? What gets worse?

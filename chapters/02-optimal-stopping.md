@@ -250,3 +250,24 @@ bear on this decision — they often do.
 **Connection to previous chapters:** The Bayesian habits from Chapter 1 carry forward — your priors on "how good is good enough" inform the threshold. If Chapter 1's entry was about a decision adjacent to this one, the project will reference it.
 
 **Preview of next chapter:** Chapter 3 (Multi-Armed Bandits) addresses the *plural* version of optimal stopping — when there are several options and you'll allocate trials across them over time, balancing learning against earning. A/B testing, ad creatives, where to invest career energy, which side projects to keep alive.
+
+---
+
+## 🕰️ AI Wayback Machine
+
+The ideas in this chapter didn't appear from nowhere. **Yuan Shih Chow** co-wrote *Great Expectations: The Theory of Optimal Stopping* in 1971 — the textbook that organized half a century of probability theory around the question this chapter is built on: when do you commit, and when do you keep looking?
+
+**Run this:**
+
+```
+Who was Yuan Shih Chow, and how does his work on the theory of optimal stopping connect to the secretary problem and stopping rules we covered in this chapter? Keep it to three paragraphs. End with the single most surprising thing about his career or ideas.
+```
+
+→ Search **"Yuan Shih Chow"** on Wikipedia. See what the model got right, got wrong, or left out.
+
+**Now make the prompt better.** Try one of these:
+
+- Ask it to explain the martingale formulation of optimal stopping in plain language, using the secretary problem as the concrete instance.
+- Ask it to compare Chow's continuous-time formulation with the discrete decisions you actually had to make in this chapter — when do they agree?
+
+What changes? What gets better? What gets worse?

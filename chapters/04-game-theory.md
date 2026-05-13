@@ -266,3 +266,24 @@ my mind*, *Outcome (to fill in later)*.
 **Connection to previous chapters:** Bayesian games (Chapter 1) come up when players have private information about each other's types. The bandit framing (Chapter 3) carries over for repeated games — but the chapter is careful to flag full-RL territory as out of scope.
 
 **Preview of next chapter:** Chapter 5 (Scheduling) returns to single-agent territory but adds the brutality of finite resources and deadlines. Engineering capacity, sprint planning, when to ship — anything where capacity is the bottleneck.
+
+---
+
+## 🕰️ AI Wayback Machine
+
+The ideas in this chapter didn't appear from nowhere. **Elinor Ostrom** spent decades collecting field data on how communities sustainably manage shared resources — pastures, fisheries, irrigation systems — and built a game-theoretic account of when commons survive without privatization or top-down regulation. She won the 2009 Nobel Prize in Economics, the first woman to do so.
+
+**Run this:**
+
+```
+Who was Elinor Ostrom, and how does her game-theoretic analysis of common-pool resources connect to the cooperation, equilibrium, and repeated-game concepts we covered in this chapter? Keep it to three paragraphs. End with the single most surprising thing about her career or ideas.
+```
+
+→ Search **"Elinor Ostrom"** on Wikipedia. See what the model got right, got wrong, or left out.
+
+**Now make the prompt better.** Try one of these:
+
+- Ask it to translate one of Ostrom's eight design principles for stable commons into the language of repeated-game equilibria.
+- Ask it to compare Ostrom's empirical fieldwork with the formal game theory in this chapter — when do they reach the same conclusion?
+
+What changes? What gets better? What gets worse?

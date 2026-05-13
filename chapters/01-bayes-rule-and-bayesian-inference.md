@@ -259,3 +259,24 @@ Keep the tone direct. This is a journal, not a memo.
 **Connection to previous chapters:** None — this is the seed.
 
 **Preview of next chapter:** Chapter 2 (Optimal Stopping) asks you to analyze a "when do I commit?" decision — a job offer, a candidate, an apartment, an investment — under the threshold rule. The Bayesian habits from this entry carry forward; the new question is *not* what you believe, but when you should stop deliberating.
+
+---
+
+## 🕰️ AI Wayback Machine
+
+The ideas in this chapter didn't appear from nowhere. **David Blackwell** built much of the modern theory of Bayesian decision-making in the 1950s — including the Rao–Blackwell theorem, which sharpens any estimator into a better one. He was the first Black scholar elected to the National Academy of Sciences.
+
+**Run this:**
+
+```
+Who was David Blackwell, and how does his work on Bayesian decision theory and sufficient statistics connect to the Bayes-rule inference we used in this chapter? Keep it to three paragraphs. End with the single most surprising thing about his career or ideas.
+```
+
+→ Search **"David Blackwell"** on Wikipedia. See what the model got right, got wrong, or left out.
+
+**Now make the prompt better.** Try one of these:
+
+- Ask it to walk through one example of the Rao-Blackwell theorem in plain language — connect it to the idea of updating a prior with evidence.
+- Add a constraint: "Answer as the foreword to a Bayesian statistics textbook published in 1955."
+
+What changes? What gets better? What gets worse?

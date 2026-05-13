@@ -256,3 +256,24 @@ fill in later)*.
 **Connection to previous chapters:** LP for scheduling traces back to Vol. 1 Chapter 13; approximation framing to Vol. 1 Chapter 11. The bandit framing (Chapter 3) reappears when you treat *which task to start next* as an information-acquisition decision under uncertainty.
 
 **Preview of next chapter:** Chapter 6 (Stable Matching) returns to two-sided problems — but instead of strategy and competition, the question is *pairing* with stability. Hiring matches, school choice, partner-finding, vendor-engineer assignments, residency-style markets.
+
+---
+
+## 🕰️ AI Wayback Machine
+
+The ideas in this chapter didn't appear from nowhere. **Eugene Lawler** helped found combinatorial optimization at Berkeley in the 1960s — co-authoring the canonical book on machine scheduling and proving complexity results that decide which scheduling problems are tractable and which aren't. His three-field notation still classifies scheduling problems today.
+
+**Run this:**
+
+```
+Who was Eugene Lawler, and how does his work on combinatorial scheduling and the three-field classification connect to the scheduling algorithms we used in this chapter? Keep it to three paragraphs. End with the single most surprising thing about his career or ideas.
+```
+
+→ Search **"Eugene Lawler"** on Wikipedia. See what the model got right, got wrong, or left out.
+
+**Now make the prompt better.** Try one of these:
+
+- Ask it to explain Lawler's three-field notation using one specific scheduling problem from this chapter as the example.
+- Add a constraint: "Answer as Lawler's 1970s lecture notes on integer programming for scheduling."
+
+What changes? What gets better? What gets worse?
