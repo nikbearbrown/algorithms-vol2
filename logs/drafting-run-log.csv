@@ -1,0 +1,9 @@
+chapter_number,chapter_slug,word_count,source_folders_used,verify_count,drafted_at,notes
+01,bayes-rule,2702,Bayes_Rule,2,2026-04-30,medical-test interpretation worked example; conjugate-prior families
+02,optimal-stopping,2465,Optimal_Stopping,1,2026-04-30,startup hiring → secretary problem; six-failure-mode taxonomy
+03,explore-exploit,2605,Explore_Exploit,9,2026-04-30,CTR optimization comparing A/B/epsilon-greedy/UCB/Thompson
+04,game-theory,2757,Game_Theory,8,2026-04-30,absorbed auction/mechanism content from removed Ch 9; three-perspective platform pricing
+05,scheduling,2433,Scheduling,8,2026-04-30,Bazel/Make build scheduling worked example; α|β|γ classification
+06,stable-matching,2656,Stable_Matching (thin) + canonical knowledge,12,2026-04-30,HIGHEST [verify] in Vol 2; source folder 31-line README only; composed from canonical Gale-Shapley/Roth literature
+07,randomness-and-networking,2597,Randomness_and_Networking + canonical distributed-systems knowledge,9,2026-04-30,networking-half largely Claude composition; consistent hashing worked example
+08,social-networks,2513,Social_Networks,13,2026-04-30,influence maximization with submodularity worked example; substantial source coverage
