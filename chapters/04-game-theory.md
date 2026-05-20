@@ -272,7 +272,7 @@ my mind*, *Outcome (to fill in later)*.
 
 ---
 
-## 🕰️ AI Wayback Machine
+## AI Wayback Machine
 
 The ideas in this chapter didn't appear from nowhere. **Elinor Ostrom** spent decades collecting field data on how communities sustainably manage shared resources — pastures, fisheries, irrigation systems — and built a game-theoretic account of when commons survive without privatization or top-down regulation. She won the 2009 Nobel Prize in Economics, the first woman to do so.
 

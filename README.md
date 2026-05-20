@@ -123,3 +123,69 @@ When all chapters are `revised`, the book is ready for KDP submission.
 ---
 
 _Generated overview-and-TOC README. Source files (`book.md`, `outline.md`, etc.) remain the working documents._
+
+---
+
+## What This Book Is
+
+<!-- TODO: populate from chapter content -->
+
+---
+
+## Who This Book Is For
+
+reader's roadmap)
+
+This file is a stub. Sections 1–10 and 12–13 are placeholders for a later pass.
+Section 11 (A note about AI) is substantive and written.
+
+A good model for the full version: Pearl's "The Mind Over Data" introduction,
+Molnar's Interpretable ML introduction. Both are argument-first and tell the
+reader exactly what to expect from each chapter.
+-->
+
+# Introduction
+
+<!-- [1] COLD OPEN
+     A specific named scene with real stakes.
+     No "this book will...", no throat-clearing.
+
+---
+
+## How to Read It
+
+<!-- TODO: populate from chapter content -->
+
+---
+
+## Signature Simulations
+
+<!-- TODO: populate from chapter content -->
+
+---
+
+## About the Author
+
+**Nik Bear Brown** teaches algorithms, decision-making under uncertainty, and AI at Northeastern University. His doctoral work at UCLA (computational and systems biology, AI, statistics) and his subsequent postdoctoral work at Harvard Medical School both turned on the kind of stochastic, optimal-stopping, and bandit-style problems that this volume covers.
+
+He is the founder of [Humanitarians AI](https://www.humanitarians.ai/), the architect of the **Brutalist** AI-assisted production framework, and the author of the *with LLMs* textbook series. His current platform projects include [Medhavi](https://medhavy.substack.com) (the intelligent textbook system in which this book lives) and [Jobsekr](https://jobsekr.app) (a labor-market platform for international students).
+
+He works in Boston. [nikbearbrown.com](https://www.nikbearbrown.com) · [irreducibly.xyz](https://irreducibly.xyz) · [skepticism.ai](https://www.skepticism.ai)
+
+---
+
+## Copyright
+
+Copyright © 2026 Nik Bear Brown. All rights reserved.
+
+Published by Bear Brown, LLC.
+
+No part of this publication may be reproduced, distributed, or transmitted in
+any form or by any means without the prior written permission of the publisher,
+except in the case of brief quotations in critical reviews and certain other
+noncommercial uses permitted by copyright law.
+
+ISBN: [INSERT ISBN]
+
+First edition: 2026
+

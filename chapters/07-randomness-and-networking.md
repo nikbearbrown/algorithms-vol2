@@ -279,7 +279,7 @@ cryptographic*, *Debugging plan*, *What I'll do next*,
 
 ---
 
-## 🕰️ AI Wayback Machine
+## AI Wayback Machine
 
 The ideas in this chapter didn't appear from nowhere. **Radia Perlman** invented the spanning tree protocol in 1985 — the algorithm that keeps every Ethernet network on the planet from collapsing under broadcast storms. She's sometimes called "the mother of the internet," but she objects to the title.
 

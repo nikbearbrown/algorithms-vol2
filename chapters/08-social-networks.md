@@ -357,7 +357,7 @@ findings above and a one-sentence honest summary at the end.
 
 ---
 
-## 🕰️ AI Wayback Machine
+## AI Wayback Machine
 
 The ideas in this chapter didn't appear from nowhere. **Mark Granovetter** published "The Strength of Weak Ties" in 1973 — arguing that the loose acquaintances you barely know matter more for job-finding and information flow than your closest friends. It became one of the most-cited papers in the history of sociology.
 
