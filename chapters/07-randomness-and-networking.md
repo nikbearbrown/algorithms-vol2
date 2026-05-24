@@ -42,7 +42,8 @@ $$\pi(v) = \frac{\deg(v)}{2m}$$
 
 High-degree vertices are visited more often. A page linked to by many other pages gets a higher stationary probability than one linked to by few. This is, essentially, PageRank.
 
-<!-- → [IMAGE: small example graph (6–8 nodes, varying degree) with each node labeled by its stationary probability π(v) = deg(v)/2m, and an arrow indicating the random walk transition; reader should see at a glance that high-degree nodes accumulate higher visit probability, and connect the formula to the PageRank intuition before the text names it] -->
+![Example graph (6–8 nodes, varying degree) with each](images/07-randomness-and-networking-fig-01.png)
+*Figure 7.1 — Example graph (6–8 nodes, varying degree) with each*
 
 The original Google algorithm formalizes the random walk with one modification: with probability $1 - d$ (the "damping factor," typically $d = 0.85$), the walker teleports to a uniformly random page rather than following a link. This ensures the walk doesn't get trapped in link sinks or disconnected components. The PageRank of a page is its stationary probability under this teleporting walk. Google announced PageRank's use in 1998; its computational dominance has since given way to learned signals, but the random walk as a centrality measure remains a foundational concept.
 
@@ -68,7 +69,8 @@ Consistent hashing solves this by mapping both keys and servers onto a circle �
 
 This was first published by Karger et al. in 1997, and it's now used in Cassandra, DynamoDB, memcached, and most production distributed key-value systems in existence.
 
-<!-- → [IMAGE: consistent hashing ring diagram — circular hash space with 4–5 server nodes placed at random positions and 8–10 keys placed at their hash positions; arc ownership indicated by color; one server marked as "leaving" with arrows showing which keys (only those in its arc) migrate to the next clockwise server; reader should see why only O(K/N) keys move on a membership change] -->
+![Consistent hashing ring diagram ](images/07-randomness-and-networking-fig-02.png)
+*Figure 7.2 — Consistent hashing ring diagram *
 
 **The virtual node problem.** With $N$ servers placed randomly on the circle, the arc lengths aren't equal — they're exponentially distributed. The unluckiest server gets an arc about $O(\log N)$ times the average, meaning it handles far more than its fair share of keys. This load imbalance grows with $N$.
 
@@ -78,7 +80,8 @@ The fix is virtual nodes: each physical server is assigned multiple positions on
 
 The "power of two choices" is the canonical analysis of this idea. Choose two servers uniformly at random; send the request to the less-loaded one. This is exponentially better in load balance than choosing one server at random, and competitive with the optimal assignment that requires global knowledge of all server loads. The insight is a general principle: two random samples plus a local comparison is dramatically better than one random sample, even though neither involves global coordination.
 
-<!-- → [CHART: bar chart comparing maximum load per server across three strategies — random (one choice), power of two choices, optimal — for 100 servers and 10,000 requests; reader should see the dramatic difference between one random choice (heavy tail) and two choices (nearly optimal), which is the whole point of the theorem and harder to feel from prose alone] -->
+![Bar chart comparing maximum load per server across](images/07-randomness-and-networking-fig-03.png)
+*Figure 7.3 — Bar chart comparing maximum load per server across*
 
 ---
 
@@ -98,7 +101,8 @@ Gossip was analyzed as a protocol in Demers et al. in 1987. The variants differ 
 
 Production systems typically combine both: rumor-mongering for fast propagation of fresh updates, anti-entropy for catching any node that missed something.
 
-<!-- → [CHART: line chart showing gossip convergence — x-axis: rounds (1 to ~20), y-axis: fraction of nodes informed (0 to 1.0); curve shows exponential growth in early rounds then rapid flattening near 1.0 at O(log n) rounds; annotated with the inflection point where i ≈ n/2; reader should see why O(log n) is the right convergence claim and feel the epidemic metaphor in the shape of the curve] -->
+![Line chart showing gossip convergence ](images/07-randomness-and-networking-fig-04.png)
+*Figure 7.4 — Line chart showing gossip convergence *
 
 The broader pattern: when global coordination is too expensive and a small inconsistency window is acceptable, gossip provides eventual consistency at almost no coordination overhead. Each node needs to know only that it should contact a random peer periodically — not which peer, not in what order, not who is the current leader.
 
@@ -301,3 +305,45 @@ career or ideas.
 - Ask it to compare Perlman's deterministic spanning tree with the randomized algorithms in this chapter — what does randomness buy, what does determinism buy?
 
 What changes? What gets better? What gets worse?
+
+## Prompts
+
+Use these prompts with Claude to generate interactive D3 v7 versions of the
+figures in this chapter. Each produces a standalone HTML file you can open
+in a browser and modify freely.
+
+**Prerequisites:** Load `brutalist/CLAUDE.md` and `brutalist/DESIGN.md` into
+your Claude project context before using these prompts. They define the stack,
+naming conventions, color system, and typography the figures use.
+
+---
+
+### Figure 7.1 — Example graph (6–8 nodes, varying degree) with each
+
+Create a standalone D3 v7 HTML file for Figure Example graph (6–8 nodes, varying degree) with each. Use the CDN https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js, inline CSS, ResizeObserver redraw, SVG role="img", aria-labelledby, title, and desc. Build the figure from this structural brief: small example graph (6–8 nodes, varying degree) with each node labeled by its stationary probability π(v) = deg(v)/2m, and an arrow indicating the random walk transition; reader should see at a glance that high-degree nodes accumulate higher visit probability, and connect the formula to the PageRank intuition before the text names it. Use the described data shape and labels; when exact values are not supplied, use plausible illustrative values that preserve the relationships in the brief. Use a zero baseline for bars or areas, direct labels where possible, and annotations named in the brief. Use only DESIGN.md color variables and the required serif/mono font split.
+
+> Reference implementation: `d3/07-randomness-and-networking-fig-01.html`
+
+---
+
+### Figure 7.2 — Consistent hashing ring diagram 
+
+Create a standalone D3 v7 HTML file for Figure Consistent hashing ring diagram . Use the CDN https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js, inline CSS, ResizeObserver redraw, SVG role="img", aria-labelledby, title, and desc. Build the figure from this structural brief: consistent hashing ring diagram — circular hash space with 4–5 server nodes placed at random positions and 8–10 keys placed at their hash positions; arc ownership indicated by color; one server marked as "leaving" with arrows showing which keys (only those in its arc) migrate to the next clockwise server; reader should see why only O(K/N) keys move on a membership change. Use the described data shape and labels; when exact values are not supplied, use plausible illustrative values that preserve the relationships in the brief. Use a zero baseline for bars or areas, direct labels where possible, and annotations named in the brief. Use only DESIGN.md color variables and the required serif/mono font split.
+
+> Reference implementation: `d3/07-randomness-and-networking-fig-02.html`
+
+---
+
+### Figure 7.3 — Bar chart comparing maximum load per server across
+
+Create a standalone D3 v7 HTML file for Figure Bar chart comparing maximum load per server across. Use the CDN https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js, inline CSS, ResizeObserver redraw, SVG role="img", aria-labelledby, title, and desc. Build the figure from this structural brief: bar chart comparing maximum load per server across three strategies — random (one choice), power of two choices, optimal — for 100 servers and 10,000 requests; reader should see the dramatic difference between one random choice (heavy tail) and two choices (nearly optimal), which is the whole point of the theorem and harder to feel from prose alone. Use the described data shape and labels; when exact values are not supplied, use plausible illustrative values that preserve the relationships in the brief. Use a zero baseline for bars or areas, direct labels where possible, and annotations named in the brief. Use only DESIGN.md color variables and the required serif/mono font split.
+
+> Reference implementation: `d3/07-randomness-and-networking-fig-03.html`
+
+---
+
+### Figure 7.4 — Line chart showing gossip convergence 
+
+Create a standalone D3 v7 HTML file for Figure Line chart showing gossip convergence . Use the CDN https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js, inline CSS, ResizeObserver redraw, SVG role="img", aria-labelledby, title, and desc. Build the figure from this structural brief: line chart showing gossip convergence — x-axis: rounds (1 to ~20), y-axis: fraction of nodes informed (0 to 1.0); curve shows exponential growth in early rounds then rapid flattening near 1.0 at O(log n) rounds; annotated with the inflection point where i ≈ n/2; reader should see why O(log n) is the right convergence claim and feel the epidemic metaphor in the shape of the curve. Use the described data shape and labels; when exact values are not supplied, use plausible illustrative values that preserve the relationships in the brief. Use a zero baseline for bars or areas, direct labels where possible, and annotations named in the brief. Use only DESIGN.md color variables and the required serif/mono font split.
+
+> Reference implementation: `d3/07-randomness-and-networking-fig-04.html`

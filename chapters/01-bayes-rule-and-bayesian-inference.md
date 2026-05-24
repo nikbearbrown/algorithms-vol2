@@ -38,7 +38,8 @@ The formula is a tautology — it follows directly from the definition of condit
 
 That last confusion has a name: the **inverse fallacy**. Conflating $P(E \mid H)$ with $P(H \mid E)$. Confusing "the probability of a positive test given the disease" with "the probability of the disease given the positive test." The test's 99% accuracy is the first quantity. What the doctor and patient need is the second. They are not the same number, and in this case they're not even close.
 
-<!-- → [INFOGRAPHIC: labeled diagram of the four Bayes terms arranged as a flow — prior P(H) feeds into the formula alongside likelihood P(E|H), marginal P(E) sits beneath as the normalizer, and posterior P(H|E) emerges on the right; arrows color-coded to show what each term represents; the inverse fallacy highlighted as a crossed arrow between likelihood and posterior — reader should see at a glance which direction the conditioning runs and where the confusion lives] -->
+![Labeled diagram of the four Bayes terms arranged](images/01-bayes-rule-and-bayesian-inference-fig-01.png)
+*Figure 1.1 — Labeled diagram of the four Bayes terms arranged*
 
 ---
 
@@ -72,7 +73,8 @@ The 999 healthy people: the 99%-specific test still generates a false positive 1
 
 Among all 11 positive results, only 1 is a true case. That's 1/11, which is about 9%.
 
-<!-- → [INFOGRAPHIC: 1,000-person icon grid — one figure highlighted red (true case), ten figures highlighted orange (false positives), 989 figures grey (true negatives); caption walks the reader through the count; reader should immediately see why the positive predictive value is ~9% despite 99% sensitivity — the visual makes the base-rate argument faster than any paragraph] -->
+![1,000-person icon grid ](images/01-bayes-rule-and-bayesian-inference-fig-02.png)
+*Figure 1.2 — 1,000-person icon grid *
 
 The base rate is doing the work. The prior — the 1-in-1,000 prevalence — is so low that even a highly accurate test is mostly detecting nothing. The denominator $P(+)$ is dominated by the false-positive term because there are so many more healthy people to generate false positives from.
 
@@ -117,7 +119,8 @@ Two independent positive tests moves the posterior from 0.1% to ~9% to ~91%. The
 
 This is why confirmatory testing works. It's not a ritual. It's a consequence of the mathematics: independent evidence multiplies. A single positive result on a low-base-rate disease is weak; two independent positives are decisive.
 
-<!-- → [CHART: horizontal bar or stepped chart showing posterior probability at three stages — Prior (0.1%), After Test 1 (9%), After Test 2 (91%) — reader should see the dramatic nonlinear jump that two independent updates produce; logarithmic scale on x-axis recommended to show all three values without compressing the first two] -->
+![Horizontal bar or stepped chart showing posterior probability](images/01-bayes-rule-and-bayesian-inference-fig-03.png)
+*Figure 1.3 — Horizontal bar or stepped chart showing posterior probability*
 
 ---
 
@@ -145,7 +148,9 @@ For certain pairings of likelihood and prior — called **conjugate pairings** �
 
 The Normal-Normal pairing works similarly for continuous observations with Gaussian noise. The Gamma-Poisson pairing covers arrival-rate estimation, defect counts, and click-through rates. These three pairings handle a large fraction of practical Bayesian inference in production systems.
 
-<!-- → [TABLE: conjugate prior reference card — three rows (Beta-Binomial, Normal-Normal, Gamma-Poisson); columns: likelihood type, prior family, posterior family, update rule in one line, typical use case; reader should be able to look up which pairing applies to their problem without returning to the prose] -->
+| likelihood type | prior family | posterior family | update rule in one line | typical use case |
+| --- | --- | --- | --- | --- |
+| conjugate prior reference card | three rows (Beta-Binomial, Normal-Normal, Gamma-Poisson | A concrete checkpoint for applying the chapter concept. | A concrete checkpoint for applying the chapter concept. | A concrete checkpoint for applying the chapter concept. |
 
 When the model is more complex — a hierarchical structure, a non-standard likelihood, multiple parameters with dependencies — conjugate updates fail. The posterior exists in principle but can't be written in closed form. This is where approximate methods enter.
 
@@ -157,7 +162,8 @@ When the model is more complex — a hierarchical structure, a non-standard like
 
 The decision among methods is driven by the problem structure: conjugate when the model permits, MCMC when accuracy is paramount, variational when scale matters, ABC when the likelihood is simulation-only.
 
-<!-- → [INFOGRAPHIC: decision flowchart — entry point "Can you use a conjugate prior?"; yes → analytical update; no → "Does accuracy matter more than speed?"; yes → MCMC; no → "Is the likelihood tractable?"; yes → variational inference; no → ABC; each leaf node includes a one-line description of the tradeoff accepted — reader should be able to navigate to the right method for their problem in four binary decisions] -->
+![Decision flowchart ](images/01-bayes-rule-and-bayesian-inference-fig-04.png)
+*Figure 1.4 — Decision flowchart *
 
 ---
 
@@ -311,3 +317,45 @@ Who was David Blackwell, and how does his work on Bayesian decision theory and s
 - Add a constraint: "Answer as the foreword to a Bayesian statistics textbook published in 1955."
 
 What changes? What gets better? What gets worse?
+
+## Prompts
+
+Use these prompts with Claude to generate interactive D3 v7 versions of the
+figures in this chapter. Each produces a standalone HTML file you can open
+in a browser and modify freely.
+
+**Prerequisites:** Load `brutalist/CLAUDE.md` and `brutalist/DESIGN.md` into
+your Claude project context before using these prompts. They define the stack,
+naming conventions, color system, and typography the figures use.
+
+---
+
+### Figure 1.1 — Labeled diagram of the four Bayes terms arranged
+
+Create a standalone D3 v7 HTML file for Figure Labeled diagram of the four Bayes terms arranged. Use the CDN https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js, inline CSS, ResizeObserver redraw, SVG role="img", aria-labelledby, title, and desc. Build the figure from this structural brief: labeled diagram of the four Bayes terms arranged as a flow — prior P(H) feeds into the formula alongside likelihood P(E|H), marginal P(E) sits beneath as the normalizer, and posterior P(H|E) emerges on the right; arrows color-coded to show what each term represents; the inverse fallacy highlighted as a crossed arrow between likelihood and posterior — reader should see at a glance which direction the conditioning runs and where the confusion lives. Use the described data shape and labels; when exact values are not supplied, use plausible illustrative values that preserve the relationships in the brief. Use a zero baseline for bars or areas, direct labels where possible, and annotations named in the brief. Use only DESIGN.md color variables and the required serif/mono font split.
+
+> Reference implementation: `d3/01-bayes-rule-and-bayesian-inference-fig-01.html`
+
+---
+
+### Figure 1.2 — 1,000-person icon grid 
+
+Create a standalone D3 v7 HTML file for Figure 1,000-person icon grid . Use the CDN https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js, inline CSS, ResizeObserver redraw, SVG role="img", aria-labelledby, title, and desc. Build the figure from this structural brief: 1,000-person icon grid — one figure highlighted red (true case), ten figures highlighted orange (false positives), 989 figures grey (true negatives); caption walks the reader through the count; reader should immediately see why the positive predictive value is ~9% despite 99% sensitivity — the visual makes the base-rate argument faster than any paragraph. Use the described data shape and labels; when exact values are not supplied, use plausible illustrative values that preserve the relationships in the brief. Use a zero baseline for bars or areas, direct labels where possible, and annotations named in the brief. Use only DESIGN.md color variables and the required serif/mono font split.
+
+> Reference implementation: `d3/01-bayes-rule-and-bayesian-inference-fig-02.html`
+
+---
+
+### Figure 1.3 — Horizontal bar or stepped chart showing posterior probability
+
+Create a standalone D3 v7 HTML file for Figure Horizontal bar or stepped chart showing posterior probability. Use the CDN https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js, inline CSS, ResizeObserver redraw, SVG role="img", aria-labelledby, title, and desc. Build the figure from this structural brief: horizontal bar or stepped chart showing posterior probability at three stages — Prior (0.1%), After Test 1 (9%), After Test 2 (91%) — reader should see the dramatic nonlinear jump that two independent updates produce; logarithmic scale on x-axis recommended to show all three values without compressing the first two. Use the described data shape and labels; when exact values are not supplied, use plausible illustrative values that preserve the relationships in the brief. Use a zero baseline for bars or areas, direct labels where possible, and annotations named in the brief. Use only DESIGN.md color variables and the required serif/mono font split.
+
+> Reference implementation: `d3/01-bayes-rule-and-bayesian-inference-fig-03.html`
+
+---
+
+### Figure 1.4 — Decision flowchart 
+
+Create a standalone D3 v7 HTML file for Figure Decision flowchart . Use the CDN https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js, inline CSS, ResizeObserver redraw, SVG role="img", aria-labelledby, title, and desc. Build the figure from this structural brief: decision flowchart — entry point "Can you use a conjugate prior?"; yes → analytical update; no → "Does accuracy matter more than speed?"; yes → MCMC; no → "Is the likelihood tractable?"; yes → variational inference; no → ABC; each leaf node includes a one-line description of the tradeoff accepted — reader should be able to navigate to the right method for their problem in four binary decisions. Use the described data shape and labels; when exact values are not supplied, use plausible illustrative values that preserve the relationships in the brief. Use a zero baseline for bars or areas, direct labels where possible, and annotations named in the brief. Use only DESIGN.md color variables and the required serif/mono font split.
+
+> Reference implementation: `d3/01-bayes-rule-and-bayesian-inference-fig-04.html`

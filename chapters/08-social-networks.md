@@ -12,7 +12,8 @@ This is counterintuitive in a specific way. It is not just surprising — it is 
 
 Understanding why that's true — and what it implies for the algorithms we use to analyze networks — is what this chapter is about.
 
-<!-- → [DIAGRAM: small graph with two dense clusters (strong ties within each cluster shown as thick edges) connected by a single thin edge (weak tie) — label one cluster "your close friends" and the other "a different community"; annotate that information starting in cluster 1 can only reach cluster 2 by crossing the weak-tie bridge; student should see visually why weak ties are structurally irreplaceable even when they feel unimportant] -->
+![Graph with two dense clusters (strong ties within](images/08-social-networks-fig-01.png)
+*Figure 8.1 — Graph with two dense clusters (strong ties within*
 
 ---
 
@@ -54,7 +55,8 @@ The fourth is closeness centrality: the average inverse shortest-path distance f
 
 These four measures can disagree completely on the same network. A highly-connected hub has high degree and often high eigenvector centrality, but may have moderate betweenness if its connections are concentrated in one community. A low-degree vertex that bridges two communities can have high betweenness and moderate closeness, but low degree and low eigenvector centrality. The error is choosing one measure and treating it as "the" answer to "who matters." Each measure answers a specific question. Know which question you're asking.
 
-<!-- → [DIAGRAM: one small network (~10 vertices) with two dense clusters connected by a bridge vertex — annotate four separate rankings on the same graph: (1) vertex with highest degree circled in one color, (2) highest betweenness in another (the bridge), (3) highest closeness in a third, (4) highest PageRank in a fourth; the four circles should land on different vertices, making the disagreement visible in one image] -->
+![One small network (~10 vertices) with two dense](images/08-social-networks-fig-02.png)
+*Figure 8.2 — One small network (~10 vertices) with two dense*
 
 ---
 
@@ -78,7 +80,8 @@ There is also a deeper issue with modularity-based methods. Modularity has a res
 
 The alternative is the stochastic block model: a probabilistic generative model where vertices have latent community labels, and edges form with probabilities that depend on the community labels of their endpoints. Fitting the model to data via MCMC or variational inference gives both community assignments and a statistical measure of fit. Block models avoid the resolution limit, handle overlapping communities, and come with principled uncertainty quantification. They are slower than Louvain at scale but give more reliable results when small communities matter.
 
-<!-- → [DIAGRAM: side-by-side illustration of Louvain vs. Leiden on a network with one small tight community inside a larger loosely-connected region — left panel shows Louvain merging the small community into the large one (resolution limit failure); right panel shows Leiden correctly identifying the small community as separate; caption should name the resolution limit explicitly] -->
+![Illustration of Louvain vs](images/08-social-networks-fig-03.png)
+*Figure 8.3 — Illustration of Louvain vs*
 
 ---
 
@@ -104,7 +107,8 @@ Submodularity is powerful because of a theorem by Nemhauser, Wolsey, and Fisher 
 
 Kempe, Kleinberg, and Tardos proved in 2003 that the IC and LT spread functions are indeed submodular, establishing the guarantee for influence maximization specifically. The result is one of the more consequential algorithmic facts for practitioners: you get a provable approximation bound on a hard problem, and the bound is tight (submodularity is exactly the property that makes the greedy guarantee work, and no stronger guarantee is achievable without assuming more structure).
 
-<!-- → [CHART: bar chart comparing influence spread achieved by three strategies — degree heuristic, PageRank heuristic, and greedy with submodularity — across seed-set budgets k = 10, 50, 100, 500; a horizontal line at (1 − 1/e) × optimal marks the greedy floor; student should see that greedy consistently meets or exceeds its guarantee while centrality heuristics trail significantly at larger budgets] -->
+![Bar chart comparing influence spread achieved by three](images/08-social-networks-fig-04.png)
+*Figure 8.4 — Bar chart comparing influence spread achieved by three*
 
 Computing marginal gains requires estimating influence spread from a candidate seed set — a $\#P$-hard computation exactly. Monte Carlo simulation is the standard: simulate the diffusion many times from the candidate set, average the results. For large networks with large budgets, this is expensive. The CELF algorithm (Leskovec et al., 2007) uses submodularity to reduce work: once a candidate's marginal gain falls below the current best, it cannot possibly be the best in this round. Lazy evaluation skips the expensive simulation for most candidates, reducing cost by orders of magnitude without affecting the output.
 
@@ -126,7 +130,8 @@ Empirical studies on real social networks show degree heuristics producing influ
 
 The same algorithm applies to vaccination targeting: given a contact network and a limited vaccine supply, maximize herd-immunity coverage. The IC model maps cleanly to SIR epidemic dynamics. Public health applications have used these methods for measles control, HIV prevention, and contact-tracing prioritization. The mathematics is identical; the edge weights encode transmission probabilities rather than social influence. The greedy guarantee holds for the same reason.
 
-<!-- → [INFOGRAPHIC: two-panel network diagram illustrating degree-heuristic seeding vs. greedy seeding on the same 20-vertex network — left panel shows 5 seeds clustered in the high-degree core (seed coverage circles overlapping heavily); right panel shows 5 greedy seeds distributed across different communities (coverage circles touching but not overlapping much); annotate total reachable vertices for each — student should see why complementary seeds outperform redundant seeds] -->
+![Network diagram illustrating degree-heuristic seeding vs](images/08-social-networks-fig-05.png)
+*Figure 8.5 — Network diagram illustrating degree-heuristic seeding vs*
 
 ---
 
@@ -378,3 +383,53 @@ surprising thing about his career or ideas.
 - Add a constraint: "Answer as the abstract of a follow-up paper to 'The Strength of Weak Ties,' written fifty years later."
 
 What changes? What gets better? What gets wrong?
+
+## Prompts
+
+Use these prompts with Claude to generate interactive D3 v7 versions of the
+figures in this chapter. Each produces a standalone HTML file you can open
+in a browser and modify freely.
+
+**Prerequisites:** Load `brutalist/CLAUDE.md` and `brutalist/DESIGN.md` into
+your Claude project context before using these prompts. They define the stack,
+naming conventions, color system, and typography the figures use.
+
+---
+
+### Figure 8.1 — Graph with two dense clusters (strong ties within
+
+Create a standalone D3 v7 HTML file for Figure Graph with two dense clusters (strong ties within. Use the CDN https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js, inline CSS, ResizeObserver redraw, SVG role="img", aria-labelledby, title, and desc. Build the figure from this structural brief: small graph with two dense clusters (strong ties within each cluster shown as thick edges) connected by a single thin edge (weak tie) — label one cluster "your close friends" and the other "a different community"; annotate that information starting in cluster 1 can only reach cluster 2 by crossing the weak-tie bridge; student should see visually why weak ties are structurally irreplaceable even when they feel unimportant. Use the described data shape and labels; when exact values are not supplied, use plausible illustrative values that preserve the relationships in the brief. Use a zero baseline for bars or areas, direct labels where possible, and annotations named in the brief. Use only DESIGN.md color variables and the required serif/mono font split.
+
+> Reference implementation: `d3/08-social-networks-fig-01.html`
+
+---
+
+### Figure 8.2 — One small network (~10 vertices) with two dense
+
+Create a standalone D3 v7 HTML file for Figure One small network (~10 vertices) with two dense. Use the CDN https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js, inline CSS, ResizeObserver redraw, SVG role="img", aria-labelledby, title, and desc. Build the figure from this structural brief: one small network (~10 vertices) with two dense clusters connected by a bridge vertex — annotate four separate rankings on the same graph: (1) vertex with highest degree circled in one color, (2) highest betweenness in another (the bridge), (3) highest closeness in a third, (4) highest PageRank in a fourth; the four circles should land on different vertices, making the disagreement visible in one image. Use the described data shape and labels; when exact values are not supplied, use plausible illustrative values that preserve the relationships in the brief. Use a zero baseline for bars or areas, direct labels where possible, and annotations named in the brief. Use only DESIGN.md color variables and the required serif/mono font split.
+
+> Reference implementation: `d3/08-social-networks-fig-02.html`
+
+---
+
+### Figure 8.3 — Illustration of Louvain vs
+
+Create a standalone D3 v7 HTML file for Figure Illustration of Louvain vs. Use the CDN https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js, inline CSS, ResizeObserver redraw, SVG role="img", aria-labelledby, title, and desc. Build the figure from this structural brief: side-by-side illustration of Louvain vs. Leiden on a network with one small tight community inside a larger loosely-connected region — left panel shows Louvain merging the small community into the large one (resolution limit failure); right panel shows Leiden correctly identifying the small community as separate; caption should name the resolution limit explicitly. Use the described data shape and labels; when exact values are not supplied, use plausible illustrative values that preserve the relationships in the brief. Use a zero baseline for bars or areas, direct labels where possible, and annotations named in the brief. Use only DESIGN.md color variables and the required serif/mono font split.
+
+> Reference implementation: `d3/08-social-networks-fig-03.html`
+
+---
+
+### Figure 8.4 — Bar chart comparing influence spread achieved by three
+
+Create a standalone D3 v7 HTML file for Figure Bar chart comparing influence spread achieved by three. Use the CDN https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js, inline CSS, ResizeObserver redraw, SVG role="img", aria-labelledby, title, and desc. Build the figure from this structural brief: bar chart comparing influence spread achieved by three strategies — degree heuristic, PageRank heuristic, and greedy with submodularity — across seed-set budgets k = 10, 50, 100, 500; a horizontal line at (1 − 1/e) × optimal marks the greedy floor; student should see that greedy consistently meets or exceeds its guarantee while centrality heuristics trail significantly at larger budgets. Use the described data shape and labels; when exact values are not supplied, use plausible illustrative values that preserve the relationships in the brief. Use a zero baseline for bars or areas, direct labels where possible, and annotations named in the brief. Use only DESIGN.md color variables and the required serif/mono font split.
+
+> Reference implementation: `d3/08-social-networks-fig-04.html`
+
+---
+
+### Figure 8.5 — Network diagram illustrating degree-heuristic seeding vs
+
+Create a standalone D3 v7 HTML file for Figure Network diagram illustrating degree-heuristic seeding vs. Use the CDN https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js, inline CSS, ResizeObserver redraw, SVG role="img", aria-labelledby, title, and desc. Build the figure from this structural brief: two-panel network diagram illustrating degree-heuristic seeding vs. greedy seeding on the same 20-vertex network — left panel shows 5 seeds clustered in the high-degree core (seed coverage circles overlapping heavily); right panel shows 5 greedy seeds distributed across different communities (coverage circles touching but not overlapping much); annotate total reachable vertices for each — student should see why complementary seeds outperform redundant seeds. Use the described data shape and labels; when exact values are not supplied, use plausible illustrative values that preserve the relationships in the brief. Use a zero baseline for bars or areas, direct labels where possible, and annotations named in the brief. Use only DESIGN.md color variables and the required serif/mono font split.
+
+> Reference implementation: `d3/08-social-networks-fig-05.html`

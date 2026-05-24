@@ -30,7 +30,16 @@ A game has three parts.
 
 That's the whole model. The game is completely specified once you name the players, their strategy sets, and their payoff function. The Prisoner's Dilemma fits in four cells. So does every other two-player, two-strategy game — and the differences between those games all live in the numbers.
 
-<!-- → [TABLE: 2×2 payoff matrix for the Prisoner's Dilemma — rows: Player 1 (Cooperate, Defect); columns: Player 2 (Cooperate, Defect); cells: (R,R), (S,T), (T,S), (P,P) with T > R > P > S labeled; Nash equilibrium cell (Defect, Defect) highlighted; reader should see at a glance why Defect dominates regardless of what the other player does, and why the Nash equilibrium is Pareto-inferior to (Cooperate, Cooperate)] -->
+| Player 2 (Cooperate | Defect) |
+| --- | --- |
+| Player 1 (Cooperate, Defect | A concrete checkpoint for applying the chapter concept. |
+| columns: Player 2 (Cooperate, Defect | A concrete checkpoint for applying the chapter concept. |
+| cells: (R,R | A concrete checkpoint for applying the chapter concept. |
+| S,T | A concrete checkpoint for applying the chapter concept. |
+| T,S | A concrete checkpoint for applying the chapter concept. |
+| P,P) with T > R > P > S labeled | A concrete checkpoint for applying the chapter concept. |
+| Nash equilibrium cell (Defect, Defect) highlighted | A concrete checkpoint for applying the chapter concept. |
+| reader should see at a glance why Defect dominates regardless of what the other player does, and why the Nash equilibrium is Pareto-inferior to (Cooperate, Cooperate | It makes the underlying reasoning visible instead of implied. |
 
 **Cooperative versus non-cooperative.** In cooperative games, players can make binding agreements — enforceable contracts, side payments, coalitions. In non-cooperative games, they can't. Most of what's useful for production systems is non-cooperative: you can't enforce a promise to your competitor not to undercut your price.
 
@@ -74,7 +83,8 @@ The Battle of the Sexes models any coordination problem where parties have share
 
 These three games — along with zero-sum minimax — cover the structural taxonomy that matters in practice. When a new problem arrives, the first question is: which of these shapes does it have?
 
-<!-- → [INFOGRAPHIC: three side-by-side 2×2 payoff matrices for Prisoner's Dilemma, Battle of the Sexes, and Chicken — each with Nash equilibria marked, dominant strategies annotated where they exist, and a one-line label of the strategic structure (Dominant strategy / Coordination / Commitment); reader should be able to visually compare the three structures and see what makes each distinct] -->
+![Three side-by-side 2×2 payoff matrices for Prisoner's Dilemma,](images/04-game-theory-fig-01.png)
+*Figure 4.1 — Three side-by-side 2×2 payoff matrices for Prisoner's Dilemma,*
 
 ---
 
@@ -98,7 +108,9 @@ Auctions are the canonical Bayesian game. Each bidder has a private valuation �
 
 The **Revenue Equivalence Theorem** (Myerson, 1981) shows that under standard conditions, all four formats yield the same expected revenue to the seller. The strategic complexity differs enormously; the revenue doesn't.
 
-<!-- → [TABLE: auction format reference card — four rows (First-price, Second-price/Vickrey, English, Dutch); columns: format, who wins, what winner pays, is truth-telling dominant, strategic equivalent; reader should be able to look up any format and immediately see its strategic properties and how it pairs with the others] -->
+| format | who wins | what winner pays | is truth-telling dominant | strategic equivalent |
+| --- | --- | --- | --- | --- |
+| auction format reference card | four rows (First-price, Second-price | A concrete checkpoint for applying the chapter concept. | A concrete checkpoint for applying the chapter concept. | A concrete checkpoint for applying the chapter concept. |
 
 **VCG: generalizing the second-price principle.** The Vickrey-Clarke-Groves mechanism extends strategy-proofness to multi-item, combinatorial settings. Each winner pays the *externality* they impose on others — the value that other bidders lose because this bidder won. Truthful bidding remains dominant. VCG is used in some spectrum auctions and ad-allocation systems, though its computational complexity and vulnerability to collusion limit its use in practice.
 
@@ -116,7 +128,8 @@ The designer's problem: choose a mechanism (a message space, an allocation rule,
 
 Optimal mechanism design — what mechanism maximizes the seller's revenue, or the social planner's welfare — has clean solutions in simple settings (Myerson's optimal auction for single items) and becomes combinatorially hard in complex ones. The practical upshot: when designing pricing rules, allocation mechanisms, contest structures, or compensation schemes, ask whether the mechanism you've designed gives participants the right incentives, or whether rational participants will find a way to game it.
 
-<!-- → [INFOGRAPHIC: two-column contrast — left column "Playing the game" (you are a player, given the rules, optimize your strategy, Nash equilibrium is the goal); right column "Designing the game" (you are the mechanism designer, you choose the rules, equilibrium of your design is the tool, incentive compatibility is the constraint); reader should see the inversion clearly — same strategic logic, opposite vantage point] -->
+![Two-column contrast ](images/04-game-theory-fig-02.png)
+*Figure 4.2 — Two-column contrast *
 
 ---
 
@@ -294,3 +307,29 @@ career or ideas.
 - Ask it to compare Ostrom's empirical fieldwork with the formal game theory in this chapter — when do they reach the same conclusion?
 
 What changes? What gets better? What gets worse?
+
+## Prompts
+
+Use these prompts with Claude to generate interactive D3 v7 versions of the
+figures in this chapter. Each produces a standalone HTML file you can open
+in a browser and modify freely.
+
+**Prerequisites:** Load `brutalist/CLAUDE.md` and `brutalist/DESIGN.md` into
+your Claude project context before using these prompts. They define the stack,
+naming conventions, color system, and typography the figures use.
+
+---
+
+### Figure 4.1 — Three side-by-side 2×2 payoff matrices for Prisoner's Dilemma,
+
+Create a standalone D3 v7 HTML file for Figure Three side-by-side 2×2 payoff matrices for Prisoner's Dilemma,. Use the CDN https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js, inline CSS, ResizeObserver redraw, SVG role="img", aria-labelledby, title, and desc. Build the figure from this structural brief: three side-by-side 2×2 payoff matrices for Prisoner's Dilemma, Battle of the Sexes, and Chicken — each with Nash equilibria marked, dominant strategies annotated where they exist, and a one-line label of the strategic structure (Dominant strategy / Coordination / Commitment); reader should be able to visually compare the three structures and see what makes each distinct. Use the described data shape and labels; when exact values are not supplied, use plausible illustrative values that preserve the relationships in the brief. Use a zero baseline for bars or areas, direct labels where possible, and annotations named in the brief. Use only DESIGN.md color variables and the required serif/mono font split.
+
+> Reference implementation: `d3/04-game-theory-fig-01.html`
+
+---
+
+### Figure 4.2 — Two-column contrast 
+
+Create a standalone D3 v7 HTML file for Figure Two-column contrast . Use the CDN https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js, inline CSS, ResizeObserver redraw, SVG role="img", aria-labelledby, title, and desc. Build the figure from this structural brief: two-column contrast — left column "Playing the game" (you are a player, given the rules, optimize your strategy, Nash equilibrium is the goal); right column "Designing the game" (you are the mechanism designer, you choose the rules, equilibrium of your design is the tool, incentive compatibility is the constraint); reader should see the inversion clearly — same strategic logic, opposite vantage point. Use the described data shape and labels; when exact values are not supplied, use plausible illustrative values that preserve the relationships in the brief. Use a zero baseline for bars or areas, direct labels where possible, and annotations named in the brief. Use only DESIGN.md color variables and the required serif/mono font split.
+
+> Reference implementation: `d3/04-game-theory-fig-02.html`

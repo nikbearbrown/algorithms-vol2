@@ -14,7 +14,8 @@ When I first encountered this, my instinct was: wait, this can't be that hard. Y
 
 This shape — sequential, irrevocable, uncertain — shows up everywhere. You're driving and need to park; every spot you pass is gone. You're selling a house and offers come in over weeks; the buyer won't wait while you shop around. You're an investor deciding when to exit a position; the price you saw yesterday is gone. The mathematics of these problems is the same mathematics of the hiring problem. And the answer, when you work it out, is one of the most elegant things I know.
 
-<!-- → [INFOGRAPHIC: horizontal timeline showing four real-world stopping problems side by side — parking, hiring, house offers, options exercise — each with icons showing the "observe / decide / gone" cycle; reader should see that the structure is identical across all four domains] -->
+![Horizontal timeline showing four real-world stopping problems side](images/02-optimal-stopping-fig-01.png)
+*Figure 2.1 — Horizontal timeline showing four real-world stopping problems side*
 
 ---
 
@@ -34,7 +35,8 @@ You can be too patient. You hold out for something better, keep rejecting candid
 
 The optimal strategy threads between these. You use some candidates to learn about the distribution — to calibrate your sense of how good "good" is in this pool, this market, this moment. Then you use that calibration to set a threshold. The first candidate who clears the threshold gets the job.
 
-<!-- → [DIAGRAM: two-zone number line from candidate 1 to n — left zone labeled "observe (always reject)" shaded gray, right zone labeled "accept if better than observation best" shaded green, with a vertical dividing line at m = n/e; annotate with arrows showing "too hasty" if line moves left and "too patient" if line moves right] -->
+![Two-zone number line from candidate 1 to n](images/02-optimal-stopping-fig-02.png)
+*Figure 2.2 — Two-zone number line from candidate 1 to n*
 
 ---
 
@@ -80,7 +82,8 @@ $$P(\text{success}) = \frac{1}{e} \cdot \ln(e) = \frac{1}{e} \approx 0.368$$
 
 The same number. You succeed about 37% of the time.
 
-<!-- → [CHART: smooth curve of P(success) vs. m/n for m from 0 to n, peaking at m/n = 1/e ≈ 0.368 with the peak value also ≈ 0.368; x-axis labeled "fraction of candidates used as observation phase," y-axis labeled "probability of selecting the best"; student should see the single maximum and understand why both extremes (m=0 and m=n) give zero probability] -->
+![Smooth curve of P(success) vs](images/02-optimal-stopping-fig-03.png)
+*Figure 2.3 — Smooth curve of P(success) vs*
 
 ---
 
@@ -130,7 +133,11 @@ The taxonomy matters because the wrong rule gives wrong answers. The classical 3
 | Hard deadline | Any | None | Decreasing threshold; accept anyone at the wire |
 | Small, finite $n$ | Any | None | Compute exact DP; asymptotic approximation is rough |
 
-<!-- → [TABLE: same decision table rendered with a "when to use" column added — each row gets a one-line real-world trigger ("you're buying a house with a budget and known local comp prices" → decreasing threshold; "you're hiring and candidates can rescind" → partial recall DP); helps readers pattern-match their actual situation to the right row] -->
+| Item | Meaning |
+| --- | --- |
+| rendered with a "when to use" column added | each row gets a one-line real-world trigger ("you're buying a house with a budget and known local comp prices" → decreasing threshold |
+| "you're hiring and candidates can rescind" → partial recall DP | A concrete checkpoint for applying the chapter concept. |
+| helps readers pattern-match their actual situation to the right row | A concrete checkpoint for applying the chapter concept. |
 
 ---
 
@@ -154,7 +161,8 @@ What should the CEO actually do? Something like this: observe fifteen candidates
 
 The CEO who applies the 37% rule rigidly will make decisions that are slightly wrong in four compounding ways. The CEO who understands the rule — who knows why $1/e$ drops out, what assumptions it encodes, where those assumptions fail — can adapt the strategy to the actual problem. That's the difference between knowing the name of a theorem and understanding what it says.
 
-<!-- → [INFOGRAPHIC: two-column "assumption audit" for the startup CEO example — left column lists each classical assumption (random order, irrevocable, rank-only, best-or-nothing), right column shows the real-world deviation and its directional effect on the optimal threshold; student should be able to run this audit on their own problem] -->
+![Two-column "assumption audit" for the startup CEO example](images/02-optimal-stopping-fig-04.png)
+*Figure 2.4 — Two-column "assumption audit" for the startup CEO example*
 
 ---
 
@@ -351,3 +359,45 @@ Who was Yuan Shih Chow, and how does his work on the theory of optimal stopping 
 - Ask it to compare Chow's continuous-time formulation with the discrete decisions you actually had to make in this chapter — when do they agree?
 
 What changes? What gets better? What gets worse?
+
+## Prompts
+
+Use these prompts with Claude to generate interactive D3 v7 versions of the
+figures in this chapter. Each produces a standalone HTML file you can open
+in a browser and modify freely.
+
+**Prerequisites:** Load `brutalist/CLAUDE.md` and `brutalist/DESIGN.md` into
+your Claude project context before using these prompts. They define the stack,
+naming conventions, color system, and typography the figures use.
+
+---
+
+### Figure 2.1 — Horizontal timeline showing four real-world stopping problems side
+
+Create a standalone D3 v7 HTML file for Figure Horizontal timeline showing four real-world stopping problems side. Use the CDN https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js, inline CSS, ResizeObserver redraw, SVG role="img", aria-labelledby, title, and desc. Build the figure from this structural brief: horizontal timeline showing four real-world stopping problems side by side — parking, hiring, house offers, options exercise — each with icons showing the "observe / decide / gone" cycle; reader should see that the structure is identical across all four domains. Use the described data shape and labels; when exact values are not supplied, use plausible illustrative values that preserve the relationships in the brief. Use a zero baseline for bars or areas, direct labels where possible, and annotations named in the brief. Use only DESIGN.md color variables and the required serif/mono font split.
+
+> Reference implementation: `d3/02-optimal-stopping-fig-01.html`
+
+---
+
+### Figure 2.2 — Two-zone number line from candidate 1 to n
+
+Create a standalone D3 v7 HTML file for Figure Two-zone number line from candidate 1 to n. Use the CDN https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js, inline CSS, ResizeObserver redraw, SVG role="img", aria-labelledby, title, and desc. Build the figure from this structural brief: two-zone number line from candidate 1 to n — left zone labeled "observe (always reject)" shaded gray, right zone labeled "accept if better than observation best" shaded green, with a vertical dividing line at m = n/e; annotate with arrows showing "too hasty" if line moves left and "too patient" if line moves right. Use the described data shape and labels; when exact values are not supplied, use plausible illustrative values that preserve the relationships in the brief. Use a zero baseline for bars or areas, direct labels where possible, and annotations named in the brief. Use only DESIGN.md color variables and the required serif/mono font split.
+
+> Reference implementation: `d3/02-optimal-stopping-fig-02.html`
+
+---
+
+### Figure 2.3 — Smooth curve of P(success) vs
+
+Create a standalone D3 v7 HTML file for Figure Smooth curve of P(success) vs. Use the CDN https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js, inline CSS, ResizeObserver redraw, SVG role="img", aria-labelledby, title, and desc. Build the figure from this structural brief: smooth curve of P(success) vs. m/n for m from 0 to n, peaking at m/n = 1/e ≈ 0.368 with the peak value also ≈ 0.368; x-axis labeled "fraction of candidates used as observation phase," y-axis labeled "probability of selecting the best"; student should see the single maximum and understand why both extremes (m=0 and m=n) give zero probability. Use the described data shape and labels; when exact values are not supplied, use plausible illustrative values that preserve the relationships in the brief. Use a zero baseline for bars or areas, direct labels where possible, and annotations named in the brief. Use only DESIGN.md color variables and the required serif/mono font split.
+
+> Reference implementation: `d3/02-optimal-stopping-fig-03.html`
+
+---
+
+### Figure 2.4 — Two-column "assumption audit" for the startup CEO example
+
+Create a standalone D3 v7 HTML file for Figure Two-column "assumption audit" for the startup CEO example. Use the CDN https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js, inline CSS, ResizeObserver redraw, SVG role="img", aria-labelledby, title, and desc. Build the figure from this structural brief: two-column "assumption audit" for the startup CEO example — left column lists each classical assumption (random order, irrevocable, rank-only, best-or-nothing), right column shows the real-world deviation and its directional effect on the optimal threshold; student should be able to run this audit on their own problem. Use the described data shape and labels; when exact values are not supplied, use plausible illustrative values that preserve the relationships in the brief. Use a zero baseline for bars or areas, direct labels where possible, and annotations named in the brief. Use only DESIGN.md color variables and the required serif/mono font split.
+
+> Reference implementation: `d3/02-optimal-stopping-fig-04.html`

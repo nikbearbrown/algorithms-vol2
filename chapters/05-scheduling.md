@@ -26,7 +26,9 @@ This sounds general because it is. The reason to state it carefully is that the 
 
 Scheduling theorists have a notation for this, introduced by Graham and colleagues in 1979 [verify]: three fields separated by vertical bars, written $\alpha \mid \beta \mid \gamma$. The first field describes the machine environment — single machine, identical parallel machines, job shop, flow shop. The second describes job characteristics — whether preemption is allowed, whether there are precedence constraints, whether jobs have release dates or due dates. The third describes the objective — makespan, total completion time, maximum lateness, deadline-miss count. Most production scheduling problems map onto a canonical combination in this notation, and the canonical combination tells you which algorithm to reach for.
 
-<!-- → [TABLE: three-column breakdown of the α | β | γ notation — column 1 lists α values (1, P, R, F, J, O) with plain-language names; column 2 lists common β modifiers (pmtn, prec, r_j, d_j) with one-line meanings; column 3 lists γ objectives (C_max, ΣC_j, Σw_jC_j, L_max) with plain-language names — reader should be able to classify any chapter example using this table as a reference] -->
+| Item | Meaning |
+| --- | --- |
+| as a reference | A concrete checkpoint for applying the chapter concept. |
 
 ---
 
@@ -52,7 +54,8 @@ Now add deadlines. Each task has a due date $d_j$, and you want to minimize maxi
 
 The lesson from these two algorithms is important: the optimal strategy is sensitive to the objective. SJF is wrong if you care about deadlines. EDF is wrong if you care about total completion time. Sorting by priority is wrong for both, unless "priority" happens to encode exactly the right ordering for your specific objective. It usually doesn't.
 
-<!-- → [DIAGRAM: two side-by-side Gantt charts for the same three tasks (durations 10, 3, 1 with deadlines at t=2, t=5, t=15) — left chart shows SJF order (1→3→10) with total completion time annotated; right chart shows EDF order (task with d=2 first) with deadline lines drawn and misses highlighted; student should see that the optimal order flips completely depending on the objective] -->
+![Two side-by-side Gantt charts for the same three](images/05-scheduling-fig-01.png)
+*Figure 5.1 — Two side-by-side Gantt charts for the same three*
 
 ---
 
@@ -70,7 +73,8 @@ The simplest approximation is greedy list scheduling: process tasks in some orde
 
 A better heuristic is LPT (Longest Processing Time first): sort tasks longest-to-shortest, then apply list scheduling. This is counterintuitive — for the single-machine total-completion-time problem, you ran shortest first. Here you run longest first. The reason: in the parallel setting, the dangerous outcome is finishing with one machine that's still running a long task while all others are idle. Running long tasks first distributes the heavy work early, while short tasks fill in the gaps. LPT achieves a $4/3 - 1/(3m)$ approximation ratio — within 33% of optimal, and better as $m$ grows.
 
-<!-- → [DIAGRAM: two side-by-side parallel-machine Gantt charts with 3 machines and 6 tasks of varying lengths — left shows naive greedy (arbitrary order, one machine runs a long straggler while others sit idle); right shows LPT (long tasks distributed first, short tasks fill gaps, machines finish at nearly the same time); student should see intuitively why LPT beats naive greedy on makespan] -->
+![Two side-by-side parallel-machine Gantt charts with 3 machines](images/05-scheduling-fig-02.png)
+*Figure 5.2 — Two side-by-side parallel-machine Gantt charts with 3 machines*
 
 If you need exact solutions, LP relaxation followed by rounding works for many variants. Formulate a variable $x_{j,t}$ indicating whether task $j$ is running at time $t$; write constraints encoding capacity and precedence; solve the LP relaxation; round. The LP relaxation provides a lower bound on the optimal makespan; the rounded solution is a feasible schedule; the gap is the approximation quality. For the unrelated parallel machines variant (where different machines have different speeds for different tasks), Lenstra, Shmoys, and Tardos showed in 1990 [verify] that LP rounding achieves a factor-2 approximation — and no polynomial-time algorithm is known to do better.
 
@@ -92,7 +96,8 @@ Second, the critical path tells you where to focus. Tasks on the critical path h
 
 The PERT/CPM calculation is straightforward. For each task, compute earliest start (the latest finish time of all predecessors) and latest start (deadline minus the time needed to complete the task and all its successors). The difference is slack. Tasks with zero slack are on the critical path.
 
-<!-- → [DIAGRAM: small DAG of 7–8 tasks with durations labeled on each node — arrows show dependencies; critical path highlighted in a contrasting color; each non-critical node annotated with its slack value; student should be able to trace the critical path and read off which tasks can slip without delaying the project] -->
+![DAG of 7–8 tasks with durations labeled on](images/05-scheduling-fig-03.png)
+*Figure 5.3 — DAG of 7–8 tasks with durations labeled on*
 
 When you add resource constraints — multiple machines, limited memory, workers who can only do certain tasks — the problem is Resource-Constrained Project Scheduling (RCPSP), which is strongly NP-hard even for two resource types. Production systems use heuristics (shifting bottleneck, priority rules adapted to resource levels) or MIP solvers.
 
@@ -126,7 +131,8 @@ The Linux kernel's CPU scheduler, CFS (Completely Fair Scheduler) [verify], is a
 
 The point is that CFS is not "sort by priority." It's a proportional-share scheduler with a specific fairness objective, implemented as a balanced tree for $O(\log n)$ scheduling decisions. Priority is one input; the machinery is more sophisticated.
 
-<!-- → [INFOGRAPHIC: two-column comparison of Bazel vs. Make scheduling — rows: algorithm used, critical-path awareness, resource modeling, when the difference matters, failure mode — student should see that both are correct (produce valid builds) but differ in whether they optimize makespan for large dependency graphs] -->
+![Two-column comparison of Bazel vs](images/05-scheduling-fig-04.png)
+*Figure 5.4 — Two-column comparison of Bazel vs*
 
 ---
 
@@ -367,3 +373,45 @@ single most surprising thing about his career or ideas.
 - Add a constraint: "Answer as Lawler's 1970s lecture notes on integer programming for scheduling."
 
 What changes? What gets better? What gets worse?
+
+## Prompts
+
+Use these prompts with Claude to generate interactive D3 v7 versions of the
+figures in this chapter. Each produces a standalone HTML file you can open
+in a browser and modify freely.
+
+**Prerequisites:** Load `brutalist/CLAUDE.md` and `brutalist/DESIGN.md` into
+your Claude project context before using these prompts. They define the stack,
+naming conventions, color system, and typography the figures use.
+
+---
+
+### Figure 5.1 — Two side-by-side Gantt charts for the same three
+
+Create a standalone D3 v7 HTML file for Figure Two side-by-side Gantt charts for the same three. Use the CDN https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js, inline CSS, ResizeObserver redraw, SVG role="img", aria-labelledby, title, and desc. Build the figure from this structural brief: two side-by-side Gantt charts for the same three tasks (durations 10, 3, 1 with deadlines at t=2, t=5, t=15) — left chart shows SJF order (1→3→10) with total completion time annotated; right chart shows EDF order (task with d=2 first) with deadline lines drawn and misses highlighted; student should see that the optimal order flips completely depending on the objective. Use the described data shape and labels; when exact values are not supplied, use plausible illustrative values that preserve the relationships in the brief. Use a zero baseline for bars or areas, direct labels where possible, and annotations named in the brief. Use only DESIGN.md color variables and the required serif/mono font split.
+
+> Reference implementation: `d3/05-scheduling-fig-01.html`
+
+---
+
+### Figure 5.2 — Two side-by-side parallel-machine Gantt charts with 3 machines
+
+Create a standalone D3 v7 HTML file for Figure Two side-by-side parallel-machine Gantt charts with 3 machines. Use the CDN https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js, inline CSS, ResizeObserver redraw, SVG role="img", aria-labelledby, title, and desc. Build the figure from this structural brief: two side-by-side parallel-machine Gantt charts with 3 machines and 6 tasks of varying lengths — left shows naive greedy (arbitrary order, one machine runs a long straggler while others sit idle); right shows LPT (long tasks distributed first, short tasks fill gaps, machines finish at nearly the same time); student should see intuitively why LPT beats naive greedy on makespan. Use the described data shape and labels; when exact values are not supplied, use plausible illustrative values that preserve the relationships in the brief. Use a zero baseline for bars or areas, direct labels where possible, and annotations named in the brief. Use only DESIGN.md color variables and the required serif/mono font split.
+
+> Reference implementation: `d3/05-scheduling-fig-02.html`
+
+---
+
+### Figure 5.3 — DAG of 7–8 tasks with durations labeled on
+
+Create a standalone D3 v7 HTML file for Figure DAG of 7–8 tasks with durations labeled on. Use the CDN https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js, inline CSS, ResizeObserver redraw, SVG role="img", aria-labelledby, title, and desc. Build the figure from this structural brief: small DAG of 7–8 tasks with durations labeled on each node — arrows show dependencies; critical path highlighted in a contrasting color; each non-critical node annotated with its slack value; student should be able to trace the critical path and read off which tasks can slip without delaying the project. Use the described data shape and labels; when exact values are not supplied, use plausible illustrative values that preserve the relationships in the brief. Use a zero baseline for bars or areas, direct labels where possible, and annotations named in the brief. Use only DESIGN.md color variables and the required serif/mono font split.
+
+> Reference implementation: `d3/05-scheduling-fig-03.html`
+
+---
+
+### Figure 5.4 — Two-column comparison of Bazel vs
+
+Create a standalone D3 v7 HTML file for Figure Two-column comparison of Bazel vs. Use the CDN https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js, inline CSS, ResizeObserver redraw, SVG role="img", aria-labelledby, title, and desc. Build the figure from this structural brief: two-column comparison of Bazel vs. Make scheduling — rows: algorithm used, critical-path awareness, resource modeling, when the difference matters, failure mode — student should see that both are correct (produce valid builds) but differ in whether they optimize makespan for large dependency graphs. Use the described data shape and labels; when exact values are not supplied, use plausible illustrative values that preserve the relationships in the brief. Use a zero baseline for bars or areas, direct labels where possible, and annotations named in the brief. Use only DESIGN.md color variables and the required serif/mono font split.
+
+> Reference implementation: `d3/05-scheduling-fig-04.html`
