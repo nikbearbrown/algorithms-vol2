@@ -307,29 +307,3 @@ career or ideas.
 - Ask it to compare Ostrom's empirical fieldwork with the formal game theory in this chapter — when do they reach the same conclusion?
 
 What changes? What gets better? What gets worse?
-
-## Prompts
-
-Use these prompts with Claude to generate interactive D3 v7 versions of the
-figures in this chapter. Each produces a standalone HTML file you can open
-in a browser and modify freely.
-
-**Prerequisites:** Load `brutalist/CLAUDE.md` and `brutalist/DESIGN.md` into
-your Claude project context before using these prompts. They define the stack,
-naming conventions, color system, and typography the figures use.
-
----
-
-### Figure 4.1 — Three side-by-side 2×2 payoff matrices for Prisoner's Dilemma,
-
-Create a standalone D3 v7 HTML file for Figure Three side-by-side 2×2 payoff matrices for Prisoner's Dilemma,. Use the CDN https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js, inline CSS, ResizeObserver redraw, SVG role="img", aria-labelledby, title, and desc. Build the figure from this structural brief: three side-by-side 2×2 payoff matrices for Prisoner's Dilemma, Battle of the Sexes, and Chicken — each with Nash equilibria marked, dominant strategies annotated where they exist, and a one-line label of the strategic structure (Dominant strategy / Coordination / Commitment); reader should be able to visually compare the three structures and see what makes each distinct. Use the described data shape and labels; when exact values are not supplied, use plausible illustrative values that preserve the relationships in the brief. Use a zero baseline for bars or areas, direct labels where possible, and annotations named in the brief. Use only DESIGN.md color variables and the required serif/mono font split.
-
-> Reference implementation: `d3/04-game-theory-fig-01.html`
-
----
-
-### Figure 4.2 — Two-column contrast 
-
-Create a standalone D3 v7 HTML file for Figure Two-column contrast . Use the CDN https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js, inline CSS, ResizeObserver redraw, SVG role="img", aria-labelledby, title, and desc. Build the figure from this structural brief: two-column contrast — left column "Playing the game" (you are a player, given the rules, optimize your strategy, Nash equilibrium is the goal); right column "Designing the game" (you are the mechanism designer, you choose the rules, equilibrium of your design is the tool, incentive compatibility is the constraint); reader should see the inversion clearly — same strategic logic, opposite vantage point. Use the described data shape and labels; when exact values are not supplied, use plausible illustrative values that preserve the relationships in the brief. Use a zero baseline for bars or areas, direct labels where possible, and annotations named in the brief. Use only DESIGN.md color variables and the required serif/mono font split.
-
-> Reference implementation: `d3/04-game-theory-fig-02.html`

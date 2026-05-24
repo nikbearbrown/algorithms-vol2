@@ -1,115 +1,63 @@
-<!--
-00-introduction.md — Book-level introduction.
-
-The Introduction does different work than the Preface:
-  - Preface  = why the book exists, why you wrote it (author's voice)
-  - Introduction = what the book argues and how it is organized (reader's roadmap)
-
-This file is a stub. Sections 1–10 and 12–13 are placeholders for a later pass.
-Section 11 (A note about AI) is substantive and written.
-
-A good model for the full version: Pearl's "The Mind Over Data" introduction,
-Molnar's Interpretable ML introduction. Both are argument-first and tell the
-reader exactly what to expect from each chapter.
--->
-
 # Introduction
 
-<!-- [1] COLD OPEN
-     A specific named scene with real stakes.
-     No "this book will...", no throat-clearing.
-     Open on a sentence that contains the whole problem.
-     Like the Swedish triage case in computational-skepticism-for-ai. -->
+A professional opens a familiar task and notices that the work has changed shape. The old bottleneck was production: finding the information, drafting the document, calculating the answer, building the artifact. The new bottleneck is judgment. A machine can now produce something fluent enough to move through the workflow. The harder question is whether it should.
 
-[COLD OPEN PLACEHOLDER]
+This book is about the gap between domain work as it used to be taught and domain work as it now has to be practiced with AI in the room.
 
-<!-- [2] THE CENTRAL CLAIM — one sentence.
-     "This book is about the gap between [X] and [Y]." -->
+The central argument is simple and contestable: the professional advantage in Algorithms, Vol. 2 no longer comes from doing every step by hand. It comes from knowing what to delegate, what to verify, what to reject, and what human judgment must still own because the consequences attach to a person, a community, an institution, or a client.
 
-[CENTRAL CLAIM PLACEHOLDER]
-
-<!-- [3] THE CENTRAL ARGUMENT — a testable, contestable claim
-     about what the book is doing. -->
-
-[CENTRAL ARGUMENT PLACEHOLDER]
-
-<!-- [4] AUDIENCE LOCATION — one sentence locating who this is for. -->
-
-[AUDIENCE PLACEHOLDER]
-
----
+This is a textbook for readers who want to use AI without surrendering the part of the work that makes them responsible. It is for learners, teachers, practitioners, and contributors who need a practical map rather than another list of tools.
 
 ## What This Book Is
 
-<!-- [5] Scope. The work the book names. Vocabulary it teaches. -->
+Algorithms, Vol. 2: with LLMs is a guided course in the concepts, workflows, and judgment calls that define Algorithms, Vol. 2 in the AI era. It teaches vocabulary, recurring patterns, practical exercises, and the discipline of checking machine output against human purpose.
 
-[SCOPE PLACEHOLDER]
+The book names the work that AI can accelerate and the work that still requires human interpretation. It treats AI as infrastructure: powerful, fast, useful, and incomplete. The point is not to become impressed by the machine. The point is to become more precise about what the human is for.
 
 ## What This Book Is Not
 
-<!-- [6] Explicit exclusions. Prerequisites. -->
+This book is not a promise that AI will solve Algorithms, Vol. 2. It is not a tool manual frozen to one product release. It is not legal, medical, financial, or professional advice for a specific jurisdiction or institution. When a chapter touches regulated practice, compliance, clinical care, finance, education policy, or public stakes, the reader should treat the material as a framework for judgment and seek qualified guidance where the decision requires it.
 
-[EXCLUSIONS PLACEHOLDER]
+The book assumes curiosity, basic literacy in the domain, and a willingness to test claims rather than merely repeat them. It does not assume that the reader is already an AI expert.
 
----
+## The Running Concept
 
-## A Central Concept That Runs Throughout
+The running concept is the boundary between execution and judgment. AI systems are increasingly strong at execution-shaped work: generating, summarizing, transforming, classifying, drafting, coding, and searching. Human beings remain responsible for problem formulation, plausibility auditing, causal interpretation, ethical tradeoffs, social context, and accountability under stakes.
 
-<!-- [7] A recurring idea readers should watch for across chapters.
-     Like "the fluency trap" in computational-skepticism-for-ai. -->
+A recurring danger is the fluency trap: the tendency to treat polished output as evidence that the underlying work has been done. Fluency is useful. It is not proof. Across the chapters, watch for the moment when a fluent artifact needs a human test.
 
-[CENTRAL CONCEPT PLACEHOLDER]
-
-<!-- [8] (OPTIONAL) A RUNNING NARRATIVE THREAD
-     A case that recurs across chapters as a worked example.
-     Like "Ash" in computational-skepticism-for-ai.
-     Delete this section if not using a running thread. -->
-
-## A Running Narrative Thread
-
-[NARRATIVE THREAD PLACEHOLDER — delete this section if not using one]
-
----
 
 ## How This Book Is Organized
 
-<!-- [9] Chapter-by-chapter map. Group into movements (clusters of 3–5)
-     if applicable. One sentence per chapter is enough. -->
+The chapters are arranged as a sequence of practical confrontations with the same larger problem: what changes when AI can do part of the work, but not own the consequences?
 
-[CHAPTER MAP PLACEHOLDER]
+1. **Chapter 1 — Bayes' Rule and Bayesian Inference** — This chapter develops one part of the book's argument and gives the reader a concrete place to practice it.
+2. **Chapter 2 — Optimal Stopping** — This chapter develops one part of the book's argument and gives the reader a concrete place to practice it.
+3. **Chapter 3 — Explore vs. Exploit (Multi-Armed Bandits)** — This chapter develops one part of the book's argument and gives the reader a concrete place to practice it.
+4. **Chapter 4 — Game Theory** — This chapter develops one part of the book's argument and gives the reader a concrete place to practice it.
+5. **Chapter 5 — Scheduling** — This chapter develops one part of the book's argument and gives the reader a concrete place to practice it.
+6. **Chapter 6 — Stable Matching and Gale-Shapley** — This chapter develops one part of the book's argument and gives the reader a concrete place to practice it.
+7. **Chapter 7 — Randomness and Networking** — This chapter develops one part of the book's argument and gives the reader a concrete place to practice it.
+8. **Chapter 8 — Social Networks** — This chapter develops one part of the book's argument and gives the reader a concrete place to practice it.
 
-## How to Read This Book
+## How To Read This Book
 
-<!-- [10] Order. Prerequisites for skipping around.
-     Self-contained chapters. Chapter-closing features
-     (e.g., "What would change my mind", "Still puzzling", exercises). -->
+Read the opening chapters in order if you are new to the subject. They establish the vocabulary and the boundary conditions. Later chapters can usually be read as focused modules, especially if you are looking for a specific workflow, case, or professional risk.
 
-[READING GUIDE PLACEHOLDER]
+Do the exercises. The point of an AI-era textbook is not recognition. It is transfer: can you take the distinction from the page and use it on a task the book has never seen?
 
----
+## A Note About AI
 
-## A Note about AI
+This book was made in the same world it describes. Agentic AI systems were used to gather source material, draft candidate passages, check assertions, generate examples, and support editorial workflows. That does not make the book machine-authored. It makes the production boundary explicit.
 
-This volume covers decision-making algorithms — Bayesian inference, optimal stopping, multi-armed bandits, game theory, scheduling, stable matching, randomized algorithms, social networks. Every chapter is about choosing under uncertainty, and uncertainty is exactly the place where the model is most fluently and most confidently wrong.
+The editorial claim of the AI+1 series is that AI can help with execution while humans remain responsible for judgment. That means the book must be read with the same discipline it teaches. Claims should be checked. Examples should be tested. Definitions should be compared with practice. If something looks too smooth, slow down.
 
-The model has read every textbook on every topic in this volume. It will explain Bayes' rule, derive the secretary problem solution, and recite Gittins indices on request. The fluency is the teaching asset. What the model cannot do is the specific decision the algorithm is designed to support — because the decision depends on prior beliefs, payoff structures, and time horizons that are yours, not the model's.
+The most important AI skill is not prompting. It is accountability. A prompt can produce output. A professional has to decide whether the output belongs in the world.
 
-Where the model genuinely helps: walking through the derivation of a result (the 1/e threshold for the secretary problem, the Lai–Robbins regret bound, the proof of stability for Gale–Shapley), producing worked numerical examples with the parameters varied so you can feel how the optimum moves, simulating a small instance so you can compare your intuition against the algorithm's recommendation, and stress-testing your problem formulation by asking which assumptions are doing the work.
+## Closing Return
 
-Where the model does damage: producing the actual recommendation — which option to choose, which arm to pull, which match to make, which strategy to play. The recommendation depends on prior beliefs the model is happy to assume and the operator should specify, payoffs the model is happy to assume and the operator should measure, and a time horizon the model is happy to assume and the operator should know. Producing the recommendation also obscures the model's structural failure mode: confident pattern-matching to a textbook case that does not quite fit your case.
+Return to the professional at the beginning: the familiar task, the new machine, the old responsibility. The machine has changed the tempo of the work. It has not removed the need for judgment. Start there. Then build.
 
-A specific failure mode worth naming in this volume: the model treats game-theoretic equilibria as predictions about what will happen, when the better reading is that equilibria are predictions about what cannot happen — they are constraints on the space of outcomes, not selections within it. The model will produce a confident answer to "what will player B do?" when the algorithm only supports "here is what player B cannot rationally do."
+## Tags
 
-The rule that covers all three: the algorithms in this volume tell you what to do *given* a model of the world. The model of the world is yours. The algorithm does not know your priors, your payoffs, or your horizon, and the model that explains the algorithm does not know them either. Use the model to understand the algorithm; use the algorithm to make the decision; use your own honest specification of the world to make either of those moves trustworthy.
-
----
-
-## Closing
-
-<!-- [12] Callback to the opening scene. End with a directive. -->
-
-[CLOSING PLACEHOLDER]
-
----
-
-**Tags:** <!-- [13] 5–8 discoverability tags --> [TAGS PLACEHOLDER]
+Algorithms, Vol. 2, AI+1, Humanitarians AI, Irreducibly Human, agentic AI, computational skepticism
